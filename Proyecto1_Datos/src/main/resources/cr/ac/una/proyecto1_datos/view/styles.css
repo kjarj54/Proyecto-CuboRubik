@@ -1,0 +1,15 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+.group-style {
+
+}
+
+.group-style:hover {
+    -fx-cursor: hand;
+}
