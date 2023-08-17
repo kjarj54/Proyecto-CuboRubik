@@ -1,19 +1,23 @@
 package cr.ac.una.proyecto1_datos.controller;
 
+import cr.ac.una.proyecto1_datos.model.Cubito;
 import cr.ac.una.proyecto1_datos.util.FlowController;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Camera;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
-import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import static javafx.scene.input.KeyCode.A;
 import static javafx.scene.input.KeyCode.D;
 import static javafx.scene.input.KeyCode.E;
@@ -24,14 +28,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 /**
@@ -44,43 +43,40 @@ public class A01_PruebasViewController extends Controller implements Initializab
     @FXML
     private AnchorPane root;
     @FXML
+    private ImageView imvBackground;
+    @FXML
     private SubScene subScene;
-    
+    @FXML
+    private MFXButton btnDerecha;
+    @FXML
+    private MFXButton btnArriba;
+
     private double anchorX, anchorY;
     private double anchorAngleX = 0;
     private double anchorAngleY = 0;
-    private DoubleProperty angleX = new SimpleDoubleProperty(0);
-    private DoubleProperty angleY = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleX = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
-    int[] frontFace = {
-        // Cara frontal Verde
-        0, 2, 2, 1, 1, 3, 2, 1, 3, 2, 1, 3
-    };
-    int[] rigthFace = {
-        // Cara lateral derecha Roja
-        1, 2, 3, 1, 5, 3,
-        3, 1, 7, 2, 5, 3
-    };
-    int[] backFace = {
-        // Cara trasera Azul
-        5, 2, 7, 1, 4, 3,
-        7, 1, 6, 2, 4, 3
-    };
-    int[] leftFace = {
-        // Cara lateral izquierda Naranja
-        4, 2, 6, 1, 0, 3,
-        6, 1, 2, 2, 0, 3
-    };
-    int[] upFace = {
-        // Cara superior Blanca
-        0, 2, 1, 1, 4, 3,
-        1, 1, 5, 2, 4, 3
-    };
-    int[] downFace = {
-        // Cara inferior Amarilla
-        7, 2, 3, 1, 6, 3,
-        3, 1, 2, 2, 6, 3
-    };  
+    int[] corners = {0, 2, 6, 8, 18, 20, 24, 26};
+    int[] centers = {4, 12, 14, 22};
+
+    Cubito[][][] matriz3D = new Cubito[3][3][3];
+    int[][][] matrizInt = new int[3][3][3];
+    Cubito cubito;
+
+    SmartGroup principalGroup = new SmartGroup();
+    @FXML
+    private MFXButton btnIzquierda;
+    @FXML
+    private MFXButton btnIzquierda2;
+    @FXML
+    private MFXButton btnDerecha2;
+    @FXML
+    private MFXButton btnArriba1;
+    @FXML
+    private MFXButton btnAbajo;
+    @FXML
+    private MFXButton btnAbajo1;
 
     /**
      * Initializes the controller class.
@@ -88,173 +84,86 @@ public class A01_PruebasViewController extends Controller implements Initializab
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        SmartGroup groupCen = createGroupWithBoxes();
-        SmartGroup groupUp = createGroupWithBoxes();
-        SmartGroup groupDown = createGroupWithBoxes();
 
-        groupUp.setTranslateY(-102);
-        groupDown.setTranslateY(+102);
+        int contador = 0, ejeX = -100, ejeY = -100, ejeZ = -100;
+        // Inicializar la matriz con algunos valores
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    //compara las posiciones de la matriz para asignar el tipo
+                    if (contains(corners, contador)) {
+                        cubito = new Cubito(Cubito.PositionCube.CORNER);
+                        matriz3D[i][j][k] = cubito;
+                    } else if (contains(centers, contador)) {
+                        cubito = new Cubito(Cubito.PositionCube.CENTER);
+                        matriz3D[i][j][k] = cubito;
+                    } else {
+                        cubito = new Cubito(Cubito.PositionCube.BORDER);
+                        matriz3D[i][j][k] = cubito;
+                    }
+                    cubito.getCubito().setTranslateX(ejeX);
+                    cubito.getCubito().setTranslateY(ejeY);
+                    cubito.getCubito().setTranslateZ(ejeZ);
+                    cubito.getCubito().setId(String.valueOf(contador));
+                    ejeZ += 100;
 
-        SmartGroup groupCen2 = createGroupWithBoxes();
-        SmartGroup groupUp2 = createGroupWithBoxes();
-        SmartGroup groupDown2 = createGroupWithBoxes();
-
-        groupCen2.setTranslateZ(-102);
-        groupUp2.setTranslateZ(-102);
-        groupDown2.setTranslateZ(-102);
-        groupUp2.setTranslateY(-102);
-        groupDown2.setTranslateY(+102);
-
-        SmartGroup groupCen3 = createGroupWithBoxes();
-        SmartGroup groupUp3 = createGroupWithBoxes();
-        SmartGroup groupDown3 = createGroupWithBoxes();
-
-        groupCen3.setTranslateZ(+102);
-        groupUp3.setTranslateZ(+102);
-        groupDown3.setTranslateZ(+102);
-        groupUp3.setTranslateY(-102);
-        groupDown3.setTranslateY(+102);
-
-        SmartGroup group = new SmartGroup();
-        group.getChildren().addAll(groupUp, groupCen, groupDown, groupUp2, groupCen2, groupDown2, groupUp3, groupCen3, groupDown3);
-
-        crearLineasEje(group);
+                    principalGroup.getChildren().add(cubito.getCubito());
+                    matrizInt[i][j][k] = contador;
+                    contador++;
+                }
+                ejeZ = -100;
+                ejeX += 100;
+            }
+            ejeX = -100;
+            ejeY += 100;
+        }
 
         Camera camera = new PerspectiveCamera();
 
-        subScene.setRoot(group);
+        subScene.setRoot(principalGroup);
         subScene.setCamera(camera);
 
-        //pocision en pantalla grupo principal
-        group.translateXProperty().set(540);
-        group.translateYProperty().set(260);
-        group.translateZProperty().set(500);
+        //pocision centro en pantalla del grupo principal o del cubo en si
+        principalGroup.translateXProperty().set(540);
+        principalGroup.translateYProperty().set(260);
+        principalGroup.translateZProperty().set(200);
 
-        punterosMouse(group);
-        initMouseControl(group, subScene);
+        punterosMouse(principalGroup);
+        initMouseControl(principalGroup, subScene);
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[j][0][k].getCubito().getId() + " ");
+            }
+            System.out.println();
+        }
+        crearLineasEje(principalGroup);
+//        System.out.println(group.getChildren().size());
 //        manejadores(groupCen);
-
     }
 
-    private void centrarCamara() {
-        // Reajustar la cámara para que la cara rote hacia la pantalla se convierta en la principal
-        Camera camera = new PerspectiveCamera(true);
-        camera.getTransforms().addAll(
-                new Rotate(-30, Rotate.X_AXIS), // Rotar hacia arriba
-                new Rotate(45, Rotate.Y_AXIS), // Rotar hacia la derecha
-                new Translate(0, 0, 500) // Alejar la cámara
-        );
-        subScene.setCamera(camera);
+    @Override
+    public void initialize() {
     }
 
-    private SmartGroup createGroupWithBoxes() {
-        SmartGroup group = new SmartGroup();
-
-        MeshView[] cuboMeshCenter = new MeshView[6];
-        // Cara frontal
-        cuboMeshCenter[0] = createCubeMeshView(100, frontFace, "Green");
-        // Cara lateral derecha
-        cuboMeshCenter[1] = createCubeMeshView(100, rigthFace, "Red");
-        // Cara trasera
-        cuboMeshCenter[2] = createCubeMeshView(100, backFace, "Blue");
-        // Cara lateral izquierda
-        cuboMeshCenter[3] = createCubeMeshView(100, leftFace, "Orange");
-        // Cara superior
-        cuboMeshCenter[4] = createCubeMeshView(100, upFace, "White");
-        // Cara inferior
-        cuboMeshCenter[5] = createCubeMeshView(100, downFace, "Yellow");
-
-        MeshView[] cuboMeshleft = new MeshView[6];
-        // Cara frontal
-        cuboMeshleft[0] = createCubeMeshView(100, frontFace, "Green");
-        // Cara lateral derecha
-        cuboMeshleft[1] = createCubeMeshView(100, rigthFace, "Red");
-        // Cara trasera
-        cuboMeshleft[2] = createCubeMeshView(100, backFace, "Blue");
-        // Cara lateral izquierda
-        cuboMeshleft[3] = createCubeMeshView(100, leftFace, "Orange");
-        // Cara superior
-        cuboMeshleft[4] = createCubeMeshView(100, upFace, "White");
-        // Cara inferior
-        cuboMeshleft[5] = createCubeMeshView(100, downFace, "Yellow");
-
-        MeshView[] cuboMeshRight = new MeshView[6];
-        // Cara frontal
-        cuboMeshRight[0] = createCubeMeshView(100, frontFace, "Green");
-        // Cara lateral derecha
-        cuboMeshRight[1] = createCubeMeshView(100, rigthFace, "Red");
-        // Cara trasera
-        cuboMeshRight[2] = createCubeMeshView(100, backFace, "Blue");
-        // Cara lateral izquierda
-        cuboMeshRight[3] = createCubeMeshView(100, leftFace, "Orange");
-        // Cara superior
-        cuboMeshRight[4] = createCubeMeshView(100, upFace, "White");
-        // Cara inferior
-        cuboMeshRight[5] = createCubeMeshView(100, downFace, "Yellow");
-
-        Group cubo1 = new Group(cuboMeshCenter);
-        Group cubo2 = new Group(cuboMeshRight);
-        Group cubo3 = new Group(cuboMeshleft);
-        cubo2.setTranslateX(+102);
-        cubo3.setTranslateX(-102);
-        
-//        MeshView cubo = (MeshView) cubo3.getChildren().get(0);
-//        cubo.setMaterial(new PhongMaterial(Color.BLACK));
-
-        group.getChildren().addAll(cubo1, cubo2, cubo3);
-
-        return group;
-
+    // Metodo que comprueba si un valor esta dentro de un vector
+    private boolean contains(int[] array, int value) {
+        for (int element : array) {
+            if (element == value) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private MeshView createCubeMeshView(float size, int[] face, String faceColor) {
-        TriangleMesh cubeMesh = new TriangleMesh();
-
-        // Definir los vértices del cubo
-        float halfSize = size / 2.0f;
-        float[] points = {
-            -halfSize, -halfSize, -halfSize,
-            halfSize, -halfSize, -halfSize,
-            -halfSize, halfSize, -halfSize,
-            halfSize, halfSize, -halfSize,
-            -halfSize, -halfSize, halfSize,
-            halfSize, -halfSize, halfSize,
-            -halfSize, halfSize, halfSize,
-            halfSize, halfSize, halfSize
-        };
-        cubeMesh.getPoints().addAll(points);
-
-        // Definir las coordenadas de textura (TexCoords)
-        float[] texCoords = {
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f
-        };
-        cubeMesh.getTexCoords().addAll(texCoords);
-
-        // Definir las caras del cubo
-        cubeMesh.getFaces().addAll(face);
-
-        // Asignar color a la cara específica
-        PhongMaterial material = new PhongMaterial();
-
-        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + faceColor + ".png");
-        material.setDiffuseMap(textureImage);
-
-        MeshView meshView = new MeshView(cubeMesh);
-        meshView.setDrawMode(DrawMode.FILL); // Rellenar caras
-        meshView.setMaterial(material);
-
-        return meshView;
-    }
-
+    // Metodo que grega líneas que representan los ejes X, Y y Z
     private void crearLineasEje(SmartGroup group) {
-        // Agregar líneas que representan los ejes X, Y y Z
+
         Line xAxis = new Line(0, 0, 300, 0);
         Line yAxis = new Line(0, 0, 0, 300);
         Line zAxis = new Line(0, 0, 0, -300);
 
+        // Colorea las lineas
         xAxis.setStroke(Color.RED);
         yAxis.setStroke(Color.GREEN);
         zAxis.setStroke(Color.BLUE);
@@ -267,6 +176,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
         group.getChildren().addAll(xAxis, yAxis, zAxis);
     }
 
+    // metodo que habilita funciones del teclado
     private void manejadores(SmartGroup group) {
         FlowController flowController = FlowController.getInstance();
         Stage stage = flowController.getMainStage();
@@ -319,30 +229,265 @@ public class A01_PruebasViewController extends Controller implements Initializab
         });
     }
 
-    class SmartGroup extends Group {
+    List<Group> listGroupStatic = new ArrayList<>();
+    List<Group> listGroupRotatory = new ArrayList<>();
+    SmartGroup groupFila1 = new SmartGroup();
+    SmartGroup groupFila2 = new SmartGroup();
+    SmartGroup groupColumna1 = new SmartGroup();
+    SmartGroup groupColumna2 = new SmartGroup();
 
-        Rotate r;
-        Transform t = new Rotate();
-        int x1, y1;
+    @FXML
+    private void onAntionBtnDerecha(ActionEvent event) {
 
-        void rotateByX(int ang) {
-            r = new Rotate(ang, Rotate.X_AXIS);
-            t = t.createConcatenation(r);
-            this.getTransforms().clear();
-            this.getTransforms().addAll(t);
-            x1=ang;
-        }
+        groupGiroHorizontal(0, -90, groupFila1);
 
-        void rotateByY(int ang) {
-            r = new Rotate(ang, Rotate.Y_AXIS);
-            t = t.createConcatenation(r);
-            this.getTransforms().clear();
-            this.getTransforms().addAll(t);
-            y1=ang;
+        rotarMatrizHorizontal(0, 'D');
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[0][j][k].getCubito().getId() + " ");
+            }
+            System.out.println();
         }
     }
-    
-double x;
+
+    @FXML
+    private void onAntionBtnDerecha2(ActionEvent event) {
+        groupGiroHorizontal(2, -90, groupFila2);
+
+        rotarMatrizHorizontal(2, 'D');
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[0][j][k].getCubito().getId() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @FXML
+    private void onAntionBtnIzquierda(ActionEvent event) {
+        groupGiroHorizontal(0, 90, groupFila1);
+
+        rotarMatrizHorizontal(0, 'I');
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[0][j][k].getCubito().getId() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @FXML
+    private void onAntionBtnIzquierda2(ActionEvent event) {
+        groupGiroHorizontal(2, 90, groupFila2);
+
+        rotarMatrizHorizontal(2, 'I');
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[0][j][k].getCubito().getId() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @FXML
+    private void onAntionBtnArriba(ActionEvent event) {
+        groupGiroVertical(0, -90, groupColumna1);
+
+        rotarMatrizVertical(0, 'A');
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[j][0][k].getCubito().getId() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @FXML
+    private void onAntionBtnArriba1(ActionEvent event) {
+        groupGiroVertical(2, -90, groupColumna2);
+    }
+
+    @FXML
+    private void onAntionBtnAbajo(ActionEvent event) {
+        groupGiroVertical(0, 90, groupColumna1);
+
+        rotarMatrizVertical(0, 'D');
+
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                System.out.print(matriz3D[j][0][k].getCubito().getId() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @FXML
+    private void onAntionBtnAbajo1(ActionEvent event) {
+        groupGiroVertical(2, 90, groupColumna2);
+    }
+
+    private void groupGiroVertical(int columna, int giro, SmartGroup group) {
+
+        int giroHorizontal = 0;
+
+        principalGroup.getChildren().remove(group);
+        listGroupStatic.clear();
+        listGroupRotatory.clear();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (j == columna) {
+                        listGroupRotatory.add(matriz3D[i][j][k].getCubito());
+                    }
+                }
+            }
+        }
+        group.getChildren().clear();
+        group.getChildren().addAll(listGroupRotatory);
+
+        giroHorizontal += giro;
+
+        group.rotateByX(giroHorizontal);
+
+        principalGroup.getChildren().add(group);
+        System.out.println(principalGroup.getChildren().size());
+    }
+
+    List<Group> aux1 = new ArrayList<>();
+    List<Group> aux2 = new ArrayList<>();
+
+    private void groupGiroHorizontal(int fila, int giro, SmartGroup group) {
+
+        int giroHorizontal = 0;
+
+        principalGroup.getChildren().remove(group);
+        listGroupRotatory.clear();
+        aux1.clear();
+        aux2.clear();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (i == fila) {
+                        listGroupRotatory.add(matriz3D[i][j][k].getCubito());
+                        // groupColumna1.getChildren().remove(matriz3D[i][j][k].getCubito());
+                        //groupColumna2.getChildren().remove(matriz3D[i][j][k].getCubito());
+                        //comprobarNodosRepetidosFilas(matriz3D[i][j][k]);
+                    }
+//                    if (j == 0) {
+//                        aux1.add(matriz3D[i][j][k].getCubito());
+//                    }
+//                    if (j == 2) {
+//                        aux2.add(matriz3D[i][j][k].getCubito());
+//                    }
+                }
+            }
+        }
+//        groupColumna1.getChildren().clear();
+//        groupColumna2.getChildren().clear();
+//
+//        groupColumna1.getChildren().addAll(aux1);
+//        groupColumna2.getChildren().addAll(aux2);
+        group.getChildren().clear();
+        group.getChildren().addAll(listGroupRotatory);
+        giroHorizontal += giro;
+
+        group.rotateByY(giroHorizontal);
+
+        principalGroup.getChildren().add(group);
+        System.out.println(principalGroup.getChildren().size());
+    }
+
+    private void comprobarNodosRepetidosFilas(Cubito cubo) {
+        for (int i = 0; i < groupColumna1.getChildren().size(); i++) {
+            if (groupColumna1.getChildren().get(i).getId().equals(cubo.getCubito().getId())) {
+                groupColumna1.getChildren().remove(i);
+            }
+        }
+        for (int i = 0; i < groupColumna2.getChildren().size(); i++) {
+            if (groupColumna2.getChildren().get(i).getId().equals(cubo.getCubito().getId())) {
+                groupColumna2.getChildren().remove(i);
+            }
+        }
+
+    }
+
+    private void rotarMatrizHorizontal(int fila, char opcion) {
+        int n = 3;
+        switch (opcion) {
+
+            case 'D' -> {
+                // rotar matriz sentido antihorario
+                for (int i = 0; i < n / 2; i++) {
+                    for (int j = i; j < n - i - 1; j++) {
+                        Cubito temp = matriz3D[fila][i][j];
+                        matriz3D[fila][i][j] = matriz3D[fila][j][n - i - 1];
+                        matriz3D[fila][j][n - i - 1] = matriz3D[fila][n - i - 1][n - j - 1];
+                        matriz3D[fila][n - i - 1][n - j - 1] = matriz3D[fila][n - j - 1][i];
+                        matriz3D[fila][n - j - 1][i] = temp;
+                    }
+                }
+            }
+            case 'I' -> {
+                // rotar matriz sentido horario
+                for (int i = 0; i < n / 2; i++) {
+                    for (int j = i; j < n - i - 1; j++) {
+                        Cubito temp = matriz3D[fila][i][j];
+                        matriz3D[fila][i][j] = matriz3D[fila][n - j - 1][i];
+                        matriz3D[fila][n - j - 1][i] = matriz3D[fila][n - i - 1][n - j - 1];
+                        matriz3D[fila][n - i - 1][n - j - 1] = matriz3D[fila][j][n - i - 1];
+                        matriz3D[fila][j][n - i - 1] = temp;
+                    }
+                }
+            }
+            default ->
+                throw new AssertionError();
+        }
+
+    }
+
+    private void rotarMatrizVertical(int columna, char opcion) {
+        int n = 3;
+        switch (opcion) {
+
+            case 'D' -> {
+                // rotar matriz sentido antihorario
+                for (int i = 0; i < n / 2; i++) {
+                    for (int j = i; j < n - i - 1; j++) {
+                        Cubito temp = matriz3D[i][columna][j];
+                        matriz3D[i][columna][j] = matriz3D[j][columna][n - i - 1];
+                        matriz3D[j][columna][n - i - 1] = matriz3D[n - i - 1][columna][n - j - 1];
+                        matriz3D[n - i - 1][columna][n - j - 1] = matriz3D[n - j - 1][columna][i];
+                        matriz3D[n - j - 1][columna][i] = temp;
+                    }
+                }
+            }
+            case 'A' -> {
+                // rotar matriz sentido horario
+                for (int i = 0; i < n / 2; i++) {
+                    for (int j = i; j < n - i - 1; j++) {
+                        Cubito temp = matriz3D[i][columna][j];
+                        matriz3D[i][columna][j] = matriz3D[n - j - 1][columna][i];
+                        matriz3D[n - j - 1][columna][i] = matriz3D[n - i - 1][columna][n - j - 1];
+                        matriz3D[n - i - 1][columna][n - j - 1] = matriz3D[j][columna][n - i - 1];
+                        matriz3D[j][columna][n - i - 1] = temp;
+                    }
+                }
+            }
+            default ->
+                throw new AssertionError();
+        }
+        groupGiroVertical(0, 0, groupColumna1);
+
+    }
+
+    // metodo que cambia los punteros del Mouse
     private void punterosMouse(SmartGroup group) {
         group.setOnMouseEntered(event -> {
             if (!event.isPrimaryButtonDown()) {
@@ -366,34 +511,33 @@ double x;
             group.setCursor(Cursor.OPEN_HAND);
             //centrarCamara();
             //System.out.println(angleY);
-            System.out.println(group.x1);
+            //System.out.println(group.x1);
             System.out.println(group.y1);
-            //x=angleY.doubleValue();
-//            if (angleY.equals(360)){
-//                angleY.setValue(0);
-//            }
-//            double x = group.getRotate();
-//            if (x<90)
-//                group.rotateByX((int) (90-x));
-//            if (x<180)
-//                group.rotateByX((int) (180-x));
-//            if (x<270)
-//                group.rotateByX((int) (270-x));
-//            if (x<360)
-//                group.rotateByX((int) (360-x));
-//            group.translateXProperty().set(540);
-//            group.translateYProperty().set(260);
-//            group.translateZProperty().set(500);
+
         });
     }
 
-    @Override
-    public void initialize() {
+    // Clase que extiende a group para aplicar los giros y rotaciones
+    class SmartGroup extends Group {
+
+        Rotate r;
+        Transform t = new Rotate();
+        int x1, y1;
+
+        void rotateByX(int ang) {
+            r = new Rotate(ang, Rotate.X_AXIS);
+            t = t.createConcatenation(r);
+            this.getTransforms().clear();
+            this.getTransforms().addAll(t);
+            x1 = ang;
+        }
+
+        void rotateByY(int ang) {
+            r = new Rotate(ang, Rotate.Y_AXIS);
+            t = t.createConcatenation(r);
+            this.getTransforms().clear();
+            this.getTransforms().addAll(t);
+            y1 = ang;
+        }
     }
-
-    @FXML
-    private void onKeyPressRoot(KeyEvent event) {
-
-    }
-
 }
