@@ -20,7 +20,9 @@ import java.util.Stack;
 public class ManejoDatos {
 
     private static final String TXT_PATH = "src/main/java/cr/ac/una/proyecto1_datos/model/datos.txt";
+    private static final String TXT_PATH_RECORDS = "src/main/java/cr/ac/una/proyecto1_datos/model/records.txt";
     private Stack<Object[]> dataStack;
+    
 
     public ManejoDatos() {
         dataStack = new Stack<>();
