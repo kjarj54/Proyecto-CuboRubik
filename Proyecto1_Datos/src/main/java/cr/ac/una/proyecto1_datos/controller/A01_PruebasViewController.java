@@ -1,6 +1,7 @@
 package cr.ac.una.proyecto1_datos.controller;
 
 import cr.ac.una.proyecto1_datos.model.Cubito;
+import cr.ac.una.proyecto1_datos.util.Cronometro;
 import cr.ac.una.proyecto1_datos.util.FlowController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
@@ -63,6 +64,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
     Cubito[][][] matriz3D = new Cubito[3][3][3];
     int[][][] matrizInt = new int[3][3][3];
     Cubito cubito;
+    Cronometro cronometro;
 
     SmartGroup principalGroup = new SmartGroup();
     @FXML
@@ -84,6 +86,9 @@ public class A01_PruebasViewController extends Controller implements Initializab
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+//        cronometro = new Cronometro();// Inicializa el cronometro en 0
+//        cronometro.startCronometro(); // Inicia o continua el cronometro o hilo
+//        cronometro.stopCronometro();  // Pausa el cronometro o hilo
 
         int contador = 0, ejeX = -100, ejeY = -100, ejeZ = -100;
         // Inicializar la matriz con algunos valores
