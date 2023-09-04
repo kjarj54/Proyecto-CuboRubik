@@ -1,13 +1,13 @@
 package cr.ac.una.proyecto1_datos.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
 
 /**
  *
@@ -19,7 +19,7 @@ public class Cubito {
     private Group cubito;
     private int id;
     private int sides;
-    private List<String> colors;
+    private List<String> colorsList;
 
     //Crea la triangulacion y caras de cada cubo
     // Cara frontal Verde
@@ -35,99 +35,140 @@ public class Cubito {
     // Cara inferior Amarilla
     int[] downFace = {7, 2, 3, 1, 6, 3, /*|*/ 3, 1, 2, 2, 6, 3};
 
-    public Cubito(PositionCube position) {
-        //this.id = id;
+    public Cubito(int id, PositionCube position) {
+        this.id = id;
         this.position = position;
-        this.colors = new ArrayList<>();
-        this.cubito = cubo();
+        this.colorsList = new ArrayList<>();
         initializeDefaults();
     }
 
     private void initializeDefaults() {
-        switch (id) {
-            case 0 -> {
+        switch (position) {
+            case CORNER -> {
+                if (id == 0) {
+                    colorsList.addAll(Arrays.asList("Orange", "Green", "White")); //0,3,4
+                }
+                if (id == 2) {
+                    colorsList.addAll(Arrays.asList("Blue", "Orange", "White")); //2,3,4
+                }
+                if (id == 6) {
+                    colorsList.addAll(Arrays.asList("Green", "Red", "White")); //0,1,4
+                }
+                if (id == 8) {
+                    colorsList.addAll(Arrays.asList("Red", "Blue", "White"));//1,2,4
+                }
+                if (id == 18) {
+                    colorsList.addAll(Arrays.asList("Orange", "Green", "Yellow"));//0,3,5
+                }
+                if (id == 20) {
+                    colorsList.addAll(Arrays.asList("Blue", "Orange", "Yellow"));//2,3,5
+                }
+                if (id == 24) {
+                    colorsList.addAll(Arrays.asList("Green", "Red", "Yellow"));//0,1,5
+                }
+                if (id == 26) {
+                    colorsList.addAll(Arrays.asList("Red", "Blue", "Yellow"));//1,2,5
+                }
                 sides = 3;
             }
-            case 1 -> {
+            case BORDER -> {
+                if (id == 1) {
+                    colorsList.addAll(Arrays.asList("Orange", "White"));//3,4
+                }
+                if (id == 3) {
+                    colorsList.addAll(Arrays.asList("Green", "White"));//0,4
+                }
+                if (id == 5) {
+                    colorsList.addAll(Arrays.asList("Blue", "White"));//2,4
+                }
+                if (id == 7) {
+                    colorsList.addAll(Arrays.asList("Red", "White"));//1,4
+                }
+                if (id == 9) {
+                    colorsList.addAll(Arrays.asList("Orange", "Green"));//0,3
+                }
+                if (id == 11) {
+                    colorsList.addAll(Arrays.asList("Orange", "Blue"));//2,3
+                }
+                if (id == 15) {
+                    colorsList.addAll(Arrays.asList("Red", "Green"));//0,1
+                }
+                if (id == 17) {
+                    colorsList.addAll(Arrays.asList("Red", "Blue"));//1,2
+                }
+                if (id == 19) {
+                    colorsList.addAll(Arrays.asList("Orange", "Yellow"));//3,5
+                }
+                if (id == 21) {
+                    colorsList.addAll(Arrays.asList("Green", "Yellow"));//0,5
+                }
+                if (id == 23) {
+                    colorsList.addAll(Arrays.asList("Blue", "Yellow"));//2,5
+                }
+                if (id == 25) {
+                    colorsList.addAll(Arrays.asList("Red", "Yellow"));//1,5
+                }
                 sides = 2;
             }
-            case 2 -> {
+            case CENTER -> {
+                if (id == 4) {
+                    colorsList.add("White");//4
+                }
+                if (id == 10) {
+                    colorsList.add("Orange");//3
+                }
+                if (id == 12) {
+                    colorsList.add("Green");//0
+                }
+                if (id == 14) {
+                    colorsList.add("Blue");//2
+                }
+                if (id == 16) {
+                    colorsList.add("Red");//1
+                }
+                if (id == 22) {
+                    colorsList.add("Yellow");//5
+                }
                 sides = 1;
-            }
-            default -> {
             }
         }
     }
 
-    public Group getCubito() {
-        return cubito;
+    public PositionCube getPosition() {
+        return position;
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public int getSides() {
+        return sides;
+    }
+
     public enum PositionCube {
         CORNER,
         BORDER,
         CENTER
     }
 
-    private Group cubo() {
-        
-        //Arreglo para guardar las caras de ripo MeshView
-        MeshView[] cuboMesh = new MeshView[6];
-        // Cara frontal
-        cuboMesh[0] = createCubeMeshView(frontFace, "Green");
-        // Cara lateral derecha
-        cuboMesh[1] = createCubeMeshView(rigthFace, "Red");
-        // Cara trasera
-        cuboMesh[2] = createCubeMeshView(backFace, "Blue");
-        // Cara lateral izquierda
-        cuboMesh[3] = createCubeMeshView(leftFace, "Orange");
-        // Cara superior
-        cuboMesh[4] = createCubeMeshView(upFace, "White");
-        // Cara inferior
-        cuboMesh[5] = createCubeMeshView(downFace, "Yellow");
-        
-        //Grupo que forma el cubo con todas las caras
-        Group group = new Group(cuboMesh);
+    public List<String> getColorsList() {
+        return colorsList;
+    }
 
-        return group;
+    @Override
+    public String toString() {
+        return "Cubito{" + "rotacionX=" + ", rotacionY=" + '}';
     }
 
     private MeshView createCubeMeshView(int[] face, String faceColor) {
-        TriangleMesh cubeMesh = new TriangleMesh();
-
-        // Definir los vértices del cubo
-        float sizeCube = 50; //medida de la mitad del cubo, tamano total de 100
-        float[] points = {
-            -sizeCube, -sizeCube, -sizeCube,
-            sizeCube, -sizeCube, -sizeCube,
-            -sizeCube, sizeCube, -sizeCube,
-            sizeCube, sizeCube, -sizeCube,
-            -sizeCube, -sizeCube, sizeCube,
-            sizeCube, -sizeCube, sizeCube,
-            -sizeCube, sizeCube, sizeCube,
-            sizeCube, sizeCube, sizeCube
-        };
-        cubeMesh.getPoints().addAll(points);
-
-        // Definir las coordenadas de textura (TexCoords)
-        float[] texCoords = {
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f
-        };
-        cubeMesh.getTexCoords().addAll(texCoords);
-
-        // Definir las caras del cubo
-        cubeMesh.getFaces().addAll(face);
 
         // Asignar color a la cara específica
         PhongMaterial material = new PhongMaterial();
-
         Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + faceColor + ".png");
         material.setDiffuseMap(textureImage);
 
-        MeshView meshView = new MeshView(cubeMesh);
+        MeshView meshView = new MeshView();
         meshView.setDrawMode(DrawMode.FILL); // Rellenar caras
         meshView.setMaterial(material);
 

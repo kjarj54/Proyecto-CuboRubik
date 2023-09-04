@@ -6,10 +6,30 @@
 
 }
 
-.group-style {
-
+.mfx-ripple-generator{
+    -mfx-animation-speed: 0;
+    -mfx-background-opacity: 0;
+    -mfx-ripple-radius: 0;
+    -mfx-paused: true;
 }
 
-.group-style:hover {
+.mfx-button-Image{
     -fx-cursor: hand;
+    -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
+    -fx-content-display: graphic-only;
+    -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
+    -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
+    -fx-background-position: center; /* Centra la imagen en el botón */
+    -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+
+.mfx-button-Image:hover{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-Image:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 0, 0, 255), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-button-Image:disabled{
+    -fx-opacity: 0.4;
 }
