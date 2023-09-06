@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
@@ -39,6 +40,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -83,9 +85,17 @@ public class A01_PruebasViewController extends Controller implements Initializab
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
-    // Vectores con las posicones de las esquinas y centros
+    // Vectores con las posiciones de las esquinas y centros
     int[] corners = {0, 2, 6, 8, 18, 20, 24, 26};
     int[] centers = {4, 10, 12, 14, 16, 22};
+
+    // Vectores con las posiciones de las caras
+    int[] face0 = {0, 3, 6, 9, 12, 15, 18, 21, 24}; //cara frontal
+    int[] face1 = {6, 7, 8, 15, 16, 17, 24, 25, 26}; //cara derecha
+    int[] face2 = {2, 5, 8, 11, 14, 17, 20, 23, 26}; //cara atras
+    int[] face3 = {0, 1, 2, 9, 10, 11, 18, 19, 20}; //cara izquierda
+    int[] face4 = {0, 1, 2, 3, 4, 5, 6, 7, 8}; //cara arriba
+    int[] face5 = {18, 19, 20, 21, 22, 23, 24, 25, 26}; //cara abajo
 
     // Variables para controlar los ciclos for de la matriz principal
     int row = 3;
@@ -97,18 +107,20 @@ public class A01_PruebasViewController extends Controller implements Initializab
     Cubito cubito;
     Cronometro cronometro;
 
-    // Variable para almacenar el cubo completo y mostrar en pantalla
-    // Grupo principal en pantalla para el cubo completo
+    // Variable para almacenar el cubo3D completo y mostrar en pantalla
+    // Grupo principal en pantalla para el cubo3D completo
     SmartGroup principalGroup = new SmartGroup();
-    List<Group> listGroupRotatory = new ArrayList<>();
+//    SmartGroup auxGroupGiro = new SmartGroup();
+    List<Group> loadCubesFaces3DAux = new ArrayList<>();
     // Lista que guarda todas las caras de los cubos
-    List<Group> loadCubes;
+    List<Group> loadCubesFaces3D;
 
-    Cubo3D cubo = new Cubo3D();
+    Cubo3D cubo3D = new Cubo3D();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+//        face4.addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
         iniciarScena();
 //        cronometro = new Cronometro();// Inicializa el cronometro en 0
 //        cronometro.startCronometro(); // Inicia o continua el cronometro o hilo
@@ -122,11 +134,22 @@ public class A01_PruebasViewController extends Controller implements Initializab
     @FXML
     private void onActionBtnDerechaFila1(ActionEvent event) {
         ejecutarAccion("right0");
+
     }
 
     @FXML
     private void onActionBtnDerechaFila3(ActionEvent event) {
         ejecutarAccion("right2");
+    }
+
+    @FXML
+    private void onActionBtnIzquierdaFila1(ActionEvent event) {
+        ejecutarAccion("left0");
+    }
+
+    @FXML
+    private void onActionBtnIzquierdaFila3(ActionEvent event) {
+        ejecutarAccion("left2");
     }
 
     @FXML
@@ -150,16 +173,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
     }
 
     @FXML
-    private void onActionBtnIzquierdaFila1(ActionEvent event) {
-        ejecutarAccion("left0");
-    }
-
-    @FXML
-    private void onActionBtnIzquierdaFila3(ActionEvent event) {
-        ejecutarAccion("left2");
-    }
-
-    @FXML
     private void onActionBtnRotarReloj(ActionEvent event) {
         ejecutarAccion("hora");
     }
@@ -177,7 +190,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
     // Metodo que carga toda la pantalla principal
     private void iniciarScena() {
         int contador = 0, ejeX = -100, ejeY = -100, ejeZ = -100;
-        // Ciclo principal que llena la matriz y crea el cubo en pantalla
+        // Ciclo principal que llena la matriz y crea el cubo3D en pantalla
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 for (int k = 0; k < deep; k++) {
@@ -198,9 +211,9 @@ public class A01_PruebasViewController extends Controller implements Initializab
                         matriz3D[i][j][k] = cubito;
                     }
 
-                    cubo.getListGroup().get(contador).setTranslateX(ejeX);
-                    cubo.getListGroup().get(contador).setTranslateY(ejeY);
-                    cubo.getListGroup().get(contador).setTranslateZ(ejeZ);
+                    cubo3D.getListGroup().get(contador).setTranslateX(ejeX);
+                    cubo3D.getListGroup().get(contador).setTranslateY(ejeY);
+                    cubo3D.getListGroup().get(contador).setTranslateZ(ejeZ);
 
                     ejeZ += 100;
                     contador++;
@@ -212,9 +225,9 @@ public class A01_PruebasViewController extends Controller implements Initializab
             ejeY += 100;
         }
 
-        loadCubes = new ArrayList<>(cubo.getListGroup());
+        loadCubesFaces3D = new ArrayList<>(cubo3D.getListGroup());
 
-        principalGroup.getChildren().addAll(loadCubes);
+        principalGroup.getChildren().addAll(loadCubesFaces3D);
         principalGroup.setId("Cube");
 
         Camera camera = new PerspectiveCamera();
@@ -222,7 +235,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
         subScene.setRoot(principalGroup);
         subScene.setCamera(camera);
 
-        //pocision centro en pantalla del grupo principal o del cubo en si
+        //pocision centro en pantalla del grupo principal o del cubo3D en si
         principalGroup.translateXProperty().set(250);
         principalGroup.translateYProperty().set(260);
         principalGroup.translateZProperty().set(200);
@@ -234,9 +247,10 @@ public class A01_PruebasViewController extends Controller implements Initializab
 //      manejadores(groupCen);
     }
 
-    // Metodo que vuelve a dibujar el cubo en pantalla con las posiciones actualizadas
+    // Metodo que vuelve a dibujar el cubo3D en pantalla con las posiciones actualizadas
     private void rellenarCubo() {
-//        principalGroup.getChildren().clear();
+
+        principalGroup.getChildren().clear();
         int contador = 0;
 
         for (int i = 0; i < row; i++) {
@@ -246,25 +260,29 @@ public class A01_PruebasViewController extends Controller implements Initializab
                         contador++;
                         continue;
                     }
-                    cambiarColores(loadCubes.get(contador), matriz3D[i][j][k].getColorsList());
+                    cambiarColores(loadCubesFaces3D.get(contador), matriz3D[i][j][k].getColorsList());
                     contador++;
                 }
             }
         }
+//        contador = 0;
+//        principalGroup.getChildren().addAll(loadCubesFaces3D);
         // Por si llega a hacer alguna animacion de giro...
 //        int ejeX = -100, ejeY = -100, ejeZ = -100;
 //        // Inicializar la matriz con algunos valores
 //        for (int i = 0; i < row; i++) {
 //            for (int j = 0; j < column; j++) {
 //                for (int k = 0; k < deep; k++) {
-//                    cubito = matriz3D[i][j][k];
-//
-//                    cubito.getCubito().setTranslateX(ejeX);
-//                    cubito.getCubito().setTranslateY(ejeY);
-//                    cubito.getCubito().setTranslateZ(ejeZ);
+//                    if (contador == 13) {
+//                        ejeZ += 100;
+//                        contador++;
+//                        continue;
+//                    }
+//                    loadCubesFaces3D.get(contador).setTranslateX(ejeX);
+//                    loadCubesFaces3D.get(contador).setTranslateY(ejeY);
+//                    loadCubesFaces3D.get(contador).setTranslateZ(ejeZ);
+//                    
 //                    ejeZ += 100;
-//
-//                    principalGroup.getChildren().add(cubito.getCubito());
 //                }
 //                ejeZ = -100;
 //                ejeX += 100;
@@ -272,6 +290,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
 //            ejeX = -100;
 //            ejeY += 100;
 //        }
+        principalGroup.getChildren().addAll(loadCubesFaces3D);
     }
 
     // Repinta las caras de cada posicion, metodo perteneciente a rellenarCubo()
@@ -343,7 +362,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
         });
     }
 
-    // Metodo para el manejo del mouse del cubo, angulos, giros y rotaciones
+    // Metodo para el manejo del mouse del cubo3D, angulos, giros y rotaciones
     private void initMouseControl(SmartGroup group, SubScene scene) {
         Rotate xRotate;
         Rotate yRotate;
@@ -528,73 +547,105 @@ public class A01_PruebasViewController extends Controller implements Initializab
         // giro derecha fila 0 por cara
         if (direccion.equals("right0")) {
             switch (opcion) {
-                case 0, 1, 2, 3 ->
+                case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(0, 'R');
-                case 40, 52 ->
+                    animationRotate(face4, -90, 4);
+                }
+                case 40, 52 -> {
                     rotarMatrizGiro(2, 'H');
-                case 41, 53 ->
+                }
+                case 41, 53 -> {
                     rotarMatrizVertical(0, 'U');
+                    animationRotate(face3, -90, 3);
+                }
                 case 42, 50 ->
                     rotarMatrizGiro(0, 'A');
-                case 43, 51 ->
+                case 43, 51 -> {
                     rotarMatrizVertical(2, 'D');
+                    animationRotate(face1, 90, 1);
+                }
+
             }
         }
         // giro izquierda fila 0 por cara
         if (direccion.equals("left0")) {
             switch (opcion) {
-                case 0, 1, 2, 3 ->
+                case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(0, 'L');
+                    animationRotate(face4, 90, 4);
+                }
                 case 40, 52 ->
                     rotarMatrizGiro(2, 'A');
-                case 41, 53 ->
+                case 41, 53 -> {
                     rotarMatrizVertical(0, 'D');
+                    animationRotate(face3, 90, 3);
+                }
                 case 42, 50 ->
                     rotarMatrizGiro(0, 'H');
-                case 43, 51 ->
+                case 43, 51 -> {
                     rotarMatrizVertical(2, 'U');
+                    animationRotate(face1, -90, 1);
+                }
+
             }
         }
         // giro derecha fila 2 por cara
         if (direccion.equals("right2")) {
             switch (opcion) {
-                case 0, 1, 2, 3 ->
+                case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(2, 'R');
+                    animationRotate(face5, -90, 5);
+                }
                 case 40, 52 ->
                     rotarMatrizGiro(0, 'H');
-                case 41, 53 ->
+                case 41, 53 -> {
                     rotarMatrizVertical(2, 'U');
+                    animationRotate(face1, -90, 1);
+                }
                 case 42, 50 ->
                     rotarMatrizGiro(2, 'A');
-                case 43, 51 ->
+                case 43, 51 -> {
                     rotarMatrizVertical(0, 'D');
+                    animationRotate(face3, 90, 3);
+                }
+
             }
         }
         // giro izquierda fila 2 por cara
         if (direccion.equals("left2")) {
             switch (opcion) {
-                case 0, 1, 2, 3 ->
+                case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(2, 'L');
+                    animationRotate(face5, 90, 5);
+                }
                 case 40, 52 ->
                     rotarMatrizGiro(0, 'A');
-                case 41, 53 ->
+                case 41, 53 -> {
                     rotarMatrizVertical(2, 'D');
+                    animationRotate(face1, 90, 1);
+                }
                 case 42, 50 ->
                     rotarMatrizGiro(2, 'H');
-                case 43, 51 ->
+                case 43, 51 -> {
                     rotarMatrizVertical(0, 'U');
+                    animationRotate(face3, -90, 3);
+                }
 
             }
         }
         // giro arriba columna 0 por cara
         if (direccion.equals("up0")) {
             switch (opcion) {
-                case 0, 40, 50 ->
+                case 0, 40, 50 -> {
                     rotarMatrizVertical(0, 'U');
+                    animationRotate(face3, -90, 3);
+                }
                 case 1, 41, 51 ->
                     rotarMatrizGiro(0, 'A');
-                case 2, 42, 52 ->
+                case 2, 42, 52 -> {
                     rotarMatrizVertical(2, 'D');
+                    animationRotate(face1, 90, 1);
+                }
                 case 3, 43, 53 ->
                     rotarMatrizGiro(2, 'H');
             }
@@ -602,12 +653,16 @@ public class A01_PruebasViewController extends Controller implements Initializab
         // giro abajo columna 0 por cara
         if (direccion.equals("down0")) {
             switch (opcion) {
-                case 0, 40, 50 ->
+                case 0, 40, 50 -> {
                     rotarMatrizVertical(0, 'D');
+                    animationRotate(face3, 90, 3);
+                }
                 case 1, 41, 51 ->
                     rotarMatrizGiro(0, 'H');
-                case 2, 42, 52 ->
+                case 2, 42, 52 -> {
                     rotarMatrizVertical(2, 'U');
+                    animationRotate(face1, -90, 1);
+                }
                 case 3, 43, 53 ->
                     rotarMatrizGiro(2, 'A');
             }
@@ -615,12 +670,16 @@ public class A01_PruebasViewController extends Controller implements Initializab
         // giro arriba columna 2 por cara
         if (direccion.equals("up2")) {
             switch (opcion) {
-                case 0, 40, 50 ->
+                case 0, 40, 50 -> {
                     rotarMatrizVertical(2, 'U');
+                    animationRotate(face1, -90, 1);
+                }
                 case 1, 41, 51 ->
                     rotarMatrizGiro(2, 'A');
-                case 2, 42, 52 ->
+                case 2, 42, 52 -> {
                     rotarMatrizVertical(0, 'D');
+                    animationRotate(face3, 90, 3);
+                }
                 case 3, 43, 53 ->
                     rotarMatrizGiro(0, 'H');
             }
@@ -628,12 +687,16 @@ public class A01_PruebasViewController extends Controller implements Initializab
         // giro abajo columna 2 por cara
         if (direccion.equals("down2")) {
             switch (opcion) {
-                case 0, 40, 50 ->
+                case 0, 40, 50 -> {
                     rotarMatrizVertical(2, 'D');
+                    animationRotate(face1, 90, 1);
+                }
                 case 1, 41, 51 ->
                     rotarMatrizGiro(2, 'H');
-                case 2, 42, 52 ->
+                case 2, 42, 52 -> {
                     rotarMatrizVertical(0, 'U');
+                    animationRotate(face3, -90, 3);
+                }
                 case 3, 43, 53 ->
                     rotarMatrizGiro(0, 'A');
             }
@@ -643,16 +706,25 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0 ->
                     rotarMatrizGiro(0, 'H');
-                case 1 ->
+                case 1 -> {
                     rotarMatrizVertical(2, 'U');
+                    animationRotate(face1, -90, 1);
+                }
                 case 2 ->
                     rotarMatrizGiro(2, 'A');
-                case 3 ->
+                case 3 -> {
                     rotarMatrizVertical(0, 'D');
-                case 40, 41, 42, 43 ->
+                    animationRotate(face3, 90, 3);
+                }
+                case 40, 41, 42, 43 -> {
                     rotarMatrizHorizontal(0, 'L');
-                case 50, 51, 52, 53 ->
+                    animationRotate(face4, 90, 5);
+                }
+                case 50, 51, 52, 53 -> {
                     rotarMatrizHorizontal(2, 'R');
+                    animationRotate(face5, -90, 5);
+                }
+
             }
         }
         // giro antihorario por cara
@@ -660,23 +732,32 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0 ->
                     rotarMatrizGiro(0, 'A');
-                case 1 ->
+                case 1 -> {
                     rotarMatrizVertical(2, 'D');
+                    animationRotate(face1, 90, 1);
+                }
                 case 2 ->
                     rotarMatrizGiro(2, 'H');
-                case 3 ->
+                case 3 -> {
                     rotarMatrizVertical(0, 'U');
-                case 40, 41, 42, 43 ->
+                    animationRotate(face3, -90, 3);
+                }
+                case 40, 41, 42, 43 -> {
                     rotarMatrizHorizontal(0, 'R');
-                case 50, 51, 52, 53 ->
+                    animationRotate(face4, -90, 5);
+                }
+                case 50, 51, 52, 53 -> {
                     rotarMatrizHorizontal(2, 'L');
+                    animationRotate(face5, 90, 5);
+                }
+
             }
         }
-        //despues de hacer las respectivas rotaciones repinta el cubo
-        rellenarCubo();
+        //despues de hacer las respectivas rotaciones repinta el cubo3D
+//        rellenarCubo();
     }
 
-    // Metodo que devuelve la cara del cubo que este en pantalla
+    // Metodo que devuelve la cara del cubo3D que este en pantalla
     private int comprobarCaraActual() {
         // cara 0 o frontal
         if ((anchorAngleY >= -45 && anchorAngleY <= 45) || anchorAngleY >= 315 || anchorAngleY <= -315) {
@@ -858,43 +939,77 @@ public class A01_PruebasViewController extends Controller implements Initializab
     }
 
     // Metodo para rotacion animada/ NO IMPLEMENTADA/
-    private void groupGiroHorizontal(int fila, int giro, SmartGroup group) {
-        principalGroup.getChildren().remove(group);
-        listGroupRotatory.clear();
+    private void animationRotate(int[] vector, int rotation, int cara) {
 
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                for (int k = 0; k < deep; k++) {
-                    if (i == fila) {
-//                        listGroupRotatory.add(matriz3D[i][j][k].getCubito());
-                    }
-                }
+        Group auxGroupGiro = new Group();
+
+        for (int i = 0; i < vector.length; i++) {
+            principalGroup.getChildren().remove(loadCubesFaces3D.get(vector[i]));
+            auxGroupGiro.getChildren().add(loadCubesFaces3D.get(vector[i]));
+        }
+
+//        for (int i = inicio; i <= fin; i++) {
+//            principalGroup.getChildren().remove(loadCubesFaces3D.get(i));
+//            auxGroupGiro.getChildren().add(loadCubesFaces3D.get(i));
+//        }
+        principalGroup.getChildren().add(auxGroupGiro);
+
+        // Crear un evento de animacion rotación
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), auxGroupGiro);
+
+        switch (cara) {
+            case 0 -> {
+                rotateTransition.setAxis(Rotate.Z_AXIS);
+            }
+            case 1 -> {
+                rotateTransition.setAxis(Rotate.X_AXIS);
+            }
+            case 2 -> {
+                rotateTransition.setAxis(Rotate.Z_AXIS);
+            }
+            case 3 -> {
+                rotateTransition.setAxis(Rotate.X_AXIS);
+            }
+            case 4 -> {
+                rotateTransition.setAxis(Rotate.Y_AXIS);
+            }
+            case 5 -> {
+                rotateTransition.setAxis(Rotate.Y_AXIS);
             }
         }
-        group.getChildren().clear();
-        group.getChildren().addAll(listGroupRotatory);
 
-        group.rotateByY(giro);
-        principalGroup.getChildren().add(group);
-        principalGroup.getChildren().clear();
+        rotateTransition.setByAngle(rotation); // Grados de rotación
+
+        // Configurar el ciclo de animación
+        rotateTransition.setCycleCount(1);
+
+        // EventHandler para ejecutar una tarea cuando la animación termine
+        rotateTransition.setOnFinished((ActionEvent event) -> {
+            rellenarCubo();
+            manejoBotones(Boolean.FALSE);
+        });
+
+        // Iniciar la animación
+        rotateTransition.play();
+        manejoBotones(Boolean.TRUE);
     }
 
     // Metodo para rotacion animada/ NO IMPLEMENTADA/
     private void groupGiroVertical(int columna, int giro, SmartGroup group) {
         principalGroup.getChildren().remove(group);
-        listGroupRotatory.clear();
+        loadCubesFaces3DAux.clear();
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 for (int k = 0; k < deep; k++) {
                     if (j == columna) {
-//                        listGroupRotatory.add(matriz3D[i][j][k].getCubito());
+//                        loadCubesFaces3DAux.add(matriz3D[i][j][k].getCubito());
                     }
                 }
             }
         }
         group.getChildren().clear();
-        group.getChildren().addAll(listGroupRotatory);
+        group.getChildren().addAll(loadCubesFaces3DAux);
 
         group.rotateByX(giro);
         principalGroup.getChildren().add(group);
