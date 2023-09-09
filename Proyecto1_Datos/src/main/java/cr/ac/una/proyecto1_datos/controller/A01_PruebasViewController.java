@@ -9,7 +9,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.RotateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -101,6 +104,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
     int row = 3;
     int column = 3;
     int deep = 3;
+    int contadorDesarmar = 0; // Contador de animaciones completadas
 
     // Matriz de 3 dimensiones para almacenar objetos de tipo cubito
     Cubito[][][] matriz3D = new Cubito[3][3][3];
@@ -125,6 +129,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
 //        cronometro = new Cronometro();// Inicializa el cronometro en 0
 //        cronometro.startCronometro(); // Inicia o continua el cronometro o hilo
 //        cronometro.stopCronometro();  // Pausa el cronometro o hilo
+
     }
 
     @Override
@@ -133,58 +138,58 @@ public class A01_PruebasViewController extends Controller implements Initializab
 
     @FXML
     private void onActionBtnDerechaFila1(ActionEvent event) {
-        ejecutarAccion("right0");
-
+        ejecutarAccion(-1, "right0", 1);
     }
 
     @FXML
     private void onActionBtnDerechaFila3(ActionEvent event) {
-        ejecutarAccion("right2");
+        ejecutarAccion(-1, "right2", 1);
     }
 
     @FXML
     private void onActionBtnIzquierdaFila1(ActionEvent event) {
-        ejecutarAccion("left0");
+        ejecutarAccion(-1, "left0", 1);
     }
 
     @FXML
     private void onActionBtnIzquierdaFila3(ActionEvent event) {
-        ejecutarAccion("left2");
+        ejecutarAccion(-1, "left2", 1);
     }
 
     @FXML
     private void onActionBtnArribaColumna1(ActionEvent event) {
-        ejecutarAccion("up0");
+        ejecutarAccion(-1, "up0", 1);
     }
 
     @FXML
     private void onActionBtnArribaColumna3(ActionEvent event) {
-        ejecutarAccion("up2");
+        ejecutarAccion(-1, "up2", 1);
     }
 
     @FXML
     private void onActionBtnAbajoColumna1(ActionEvent event) {
-        ejecutarAccion("down0");
+        ejecutarAccion(-1, "down0", 1);
     }
 
     @FXML
     private void onActionBtnAbajoColumna3(ActionEvent event) {
-        ejecutarAccion("down2");
+        ejecutarAccion(-1, "down2", 1);
     }
 
     @FXML
     private void onActionBtnRotarReloj(ActionEvent event) {
-        ejecutarAccion("hora");
+        ejecutarAccion(-1, "hora", 1);
     }
 
     @FXML
     private void onActionBtnRotarAntireloj(ActionEvent event) {
-        ejecutarAccion("antihora");
+        ejecutarAccion(-1, "antihora", 1);
     }
 
     @FXML
     private void onAntionBtnArriba(ActionEvent event) {
         // Boton hacer pruebas varias
+        desarmarAleatorio();
     }
 
     // Metodo que carga toda la pantalla principal
@@ -542,27 +547,33 @@ public class A01_PruebasViewController extends Controller implements Initializab
     }
 
     // Metodo que ejecuta giros dependiendo la cara que este en pantalla
-    private void ejecutarAccion(String direccion) {
-        int opcion = comprobarCaraActual();
+    private void ejecutarAccion(int opcion, String direccion, float time) {
+
+        if (opcion == -1) {
+            opcion = comprobarCaraActual();
+        }
         // giro derecha fila 0 por cara
         if (direccion.equals("right0")) {
             switch (opcion) {
                 case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(0, 'R');
-                    animationRotate(face4, -90, 4);
+                    animationRotate(face4, -90, 4, time);
                 }
                 case 40, 52 -> {
                     rotarMatrizGiro(2, 'H');
+                    animationRotate(face2, 90, 2, time);
                 }
                 case 41, 53 -> {
                     rotarMatrizVertical(0, 'U');
-                    animationRotate(face3, -90, 3);
+                    animationRotate(face3, -90, 3, time);
                 }
-                case 42, 50 ->
+                case 42, 50 -> {
                     rotarMatrizGiro(0, 'A');
+                    animationRotate(face0, -90, 0, time);
+                }
                 case 43, 51 -> {
                     rotarMatrizVertical(2, 'D');
-                    animationRotate(face1, 90, 1);
+                    animationRotate(face1, 90, 1, time);
                 }
 
             }
@@ -572,19 +583,23 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(0, 'L');
-                    animationRotate(face4, 90, 4);
+                    animationRotate(face4, 90, 4, time);
                 }
-                case 40, 52 ->
+                case 40, 52 -> {
                     rotarMatrizGiro(2, 'A');
+                    animationRotate(face2, -90, 2, time);
+                }
                 case 41, 53 -> {
                     rotarMatrizVertical(0, 'D');
-                    animationRotate(face3, 90, 3);
+                    animationRotate(face3, 90, 3, time);
                 }
-                case 42, 50 ->
+                case 42, 50 -> {
                     rotarMatrizGiro(0, 'H');
+                    animationRotate(face0, 90, 0, time);
+                }
                 case 43, 51 -> {
                     rotarMatrizVertical(2, 'U');
-                    animationRotate(face1, -90, 1);
+                    animationRotate(face1, -90, 1, time);
                 }
 
             }
@@ -594,19 +609,23 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(2, 'R');
-                    animationRotate(face5, -90, 5);
+                    animationRotate(face5, -90, 5, time);
                 }
-                case 40, 52 ->
+                case 40, 52 -> {
                     rotarMatrizGiro(0, 'H');
+                    animationRotate(face0, 90, 0, time);
+                }
                 case 41, 53 -> {
                     rotarMatrizVertical(2, 'U');
-                    animationRotate(face1, -90, 1);
+                    animationRotate(face1, -90, 1, time);
                 }
-                case 42, 50 ->
+                case 42, 50 -> {
                     rotarMatrizGiro(2, 'A');
+                    animationRotate(face2, -90, 2, time);
+                }
                 case 43, 51 -> {
                     rotarMatrizVertical(0, 'D');
-                    animationRotate(face3, 90, 3);
+                    animationRotate(face3, 90, 3, time);
                 }
 
             }
@@ -616,19 +635,23 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 1, 2, 3 -> {
                     rotarMatrizHorizontal(2, 'L');
-                    animationRotate(face5, 90, 5);
+                    animationRotate(face5, 90, 5, time);
                 }
-                case 40, 52 ->
+                case 40, 52 -> {
                     rotarMatrizGiro(0, 'A');
+                    animationRotate(face0, -90, 0, time);
+                }
                 case 41, 53 -> {
                     rotarMatrizVertical(2, 'D');
-                    animationRotate(face1, 90, 1);
+                    animationRotate(face1, 90, 1, time);
                 }
-                case 42, 50 ->
+                case 42, 50 -> {
                     rotarMatrizGiro(2, 'H');
+                    animationRotate(face2, 90, 2, time);
+                }
                 case 43, 51 -> {
                     rotarMatrizVertical(0, 'U');
-                    animationRotate(face3, -90, 3);
+                    animationRotate(face3, -90, 3, time);
                 }
 
             }
@@ -638,16 +661,20 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 40, 50 -> {
                     rotarMatrizVertical(0, 'U');
-                    animationRotate(face3, -90, 3);
+                    animationRotate(face3, -90, 3, time);
                 }
-                case 1, 41, 51 ->
+                case 1, 41, 51 -> {
                     rotarMatrizGiro(0, 'A');
+                    animationRotate(face0, -90, 0, time);
+                }
                 case 2, 42, 52 -> {
                     rotarMatrizVertical(2, 'D');
-                    animationRotate(face1, 90, 1);
+                    animationRotate(face1, 90, 1, time);
                 }
-                case 3, 43, 53 ->
+                case 3, 43, 53 -> {
                     rotarMatrizGiro(2, 'H');
+                    animationRotate(face2, 90, 2, time);
+                }
             }
         }
         // giro abajo columna 0 por cara
@@ -655,16 +682,20 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 40, 50 -> {
                     rotarMatrizVertical(0, 'D');
-                    animationRotate(face3, 90, 3);
+                    animationRotate(face3, 90, 3, time);
                 }
-                case 1, 41, 51 ->
+                case 1, 41, 51 -> {
                     rotarMatrizGiro(0, 'H');
+                    animationRotate(face0, 90, 0, time);
+                }
                 case 2, 42, 52 -> {
                     rotarMatrizVertical(2, 'U');
-                    animationRotate(face1, -90, 1);
+                    animationRotate(face1, -90, 1, time);
                 }
-                case 3, 43, 53 ->
+                case 3, 43, 53 -> {
                     rotarMatrizGiro(2, 'A');
+                    animationRotate(face2, -90, 2, time);
+                }
             }
         }
         // giro arriba columna 2 por cara
@@ -672,16 +703,20 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 40, 50 -> {
                     rotarMatrizVertical(2, 'U');
-                    animationRotate(face1, -90, 1);
+                    animationRotate(face1, -90, 1, time);
                 }
-                case 1, 41, 51 ->
+                case 1, 41, 51 -> {
                     rotarMatrizGiro(2, 'A');
+                    animationRotate(face2, -90, 2, time);
+                }
                 case 2, 42, 52 -> {
                     rotarMatrizVertical(0, 'D');
-                    animationRotate(face3, 90, 3);
+                    animationRotate(face3, 90, 3, time);
                 }
-                case 3, 43, 53 ->
+                case 3, 43, 53 -> {
                     rotarMatrizGiro(0, 'H');
+                    animationRotate(face0, 90, 0, time);
+                }
             }
         }
         // giro abajo columna 2 por cara
@@ -689,40 +724,48 @@ public class A01_PruebasViewController extends Controller implements Initializab
             switch (opcion) {
                 case 0, 40, 50 -> {
                     rotarMatrizVertical(2, 'D');
-                    animationRotate(face1, 90, 1);
+                    animationRotate(face1, 90, 1, time);
                 }
-                case 1, 41, 51 ->
+                case 1, 41, 51 -> {
                     rotarMatrizGiro(2, 'H');
+                    animationRotate(face2, 90, 2, time);
+                }
                 case 2, 42, 52 -> {
                     rotarMatrizVertical(0, 'U');
-                    animationRotate(face3, -90, 3);
+                    animationRotate(face3, -90, 3, time);
                 }
-                case 3, 43, 53 ->
+                case 3, 43, 53 -> {
                     rotarMatrizGiro(0, 'A');
+                    animationRotate(face0, -90, 0, time);
+                }
             }
         }
         // giro horario por cara
         if (direccion.equals("hora")) {
             switch (opcion) {
-                case 0 ->
+                case 0 -> {
                     rotarMatrizGiro(0, 'H');
+                    animationRotate(face0, 90, 0, time);
+                }
                 case 1 -> {
                     rotarMatrizVertical(2, 'U');
-                    animationRotate(face1, -90, 1);
+                    animationRotate(face1, -90, 1, time);
                 }
-                case 2 ->
+                case 2 -> {
                     rotarMatrizGiro(2, 'A');
+                    animationRotate(face2, -90, 2, time);
+                }
                 case 3 -> {
                     rotarMatrizVertical(0, 'D');
-                    animationRotate(face3, 90, 3);
+                    animationRotate(face3, 90, 3, time);
                 }
                 case 40, 41, 42, 43 -> {
                     rotarMatrizHorizontal(0, 'L');
-                    animationRotate(face4, 90, 5);
+                    animationRotate(face4, 90, 5, time);
                 }
                 case 50, 51, 52, 53 -> {
                     rotarMatrizHorizontal(2, 'R');
-                    animationRotate(face5, -90, 5);
+                    animationRotate(face5, -90, 5, time);
                 }
 
             }
@@ -730,25 +773,29 @@ public class A01_PruebasViewController extends Controller implements Initializab
         // giro antihorario por cara
         if (direccion.equals("antihora")) {
             switch (opcion) {
-                case 0 ->
+                case 0 -> {
                     rotarMatrizGiro(0, 'A');
+                    animationRotate(face0, -90, 0, time);
+                }
                 case 1 -> {
                     rotarMatrizVertical(2, 'D');
-                    animationRotate(face1, 90, 1);
+                    animationRotate(face1, 90, 1, time);
                 }
-                case 2 ->
+                case 2 -> {
                     rotarMatrizGiro(2, 'H');
+                    animationRotate(face2, 90, 2, time);
+                }
                 case 3 -> {
                     rotarMatrizVertical(0, 'U');
-                    animationRotate(face3, -90, 3);
+                    animationRotate(face3, -90, 3, time);
                 }
                 case 40, 41, 42, 43 -> {
                     rotarMatrizHorizontal(0, 'R');
-                    animationRotate(face4, -90, 5);
+                    animationRotate(face4, -90, 5, time);
                 }
                 case 50, 51, 52, 53 -> {
                     rotarMatrizHorizontal(2, 'L');
-                    animationRotate(face5, 90, 5);
+                    animationRotate(face5, 90, 5, time);
                 }
 
             }
@@ -938,8 +985,23 @@ public class A01_PruebasViewController extends Controller implements Initializab
         });
     }
 
-    // Metodo para rotacion animada/ NO IMPLEMENTADA/
-    private void animationRotate(int[] vector, int rotation, int cara) {
+    private void desarmarAleatorio() {
+        int[] caras = {0, 1, 2, 3, 40, 41, 42, 43, 50, 51, 52, 53};
+        String[] direcciones = {"right0", "right2", "left0", "left2", "up0", "up2", "down0", "down2", "hora", "antihora"};
+
+        Random random = new Random();
+
+        int aux1;
+        int aux2;
+
+        aux1 = random.nextInt(caras.length);
+        aux2 = random.nextInt(direcciones.length);
+        ejecutarAccion(caras[aux1], direcciones[aux2], (float) 0.5);
+        System.out.println(aux1 + "  " + aux2);
+    }
+
+    // Metodo para rotacion animada
+    private void animationRotate(int[] vector, int rotation, int cara, float time) {
 
         Group auxGroupGiro = new Group();
 
@@ -947,15 +1009,10 @@ public class A01_PruebasViewController extends Controller implements Initializab
             principalGroup.getChildren().remove(loadCubesFaces3D.get(vector[i]));
             auxGroupGiro.getChildren().add(loadCubesFaces3D.get(vector[i]));
         }
-
-//        for (int i = inicio; i <= fin; i++) {
-//            principalGroup.getChildren().remove(loadCubesFaces3D.get(i));
-//            auxGroupGiro.getChildren().add(loadCubesFaces3D.get(i));
-//        }
         principalGroup.getChildren().add(auxGroupGiro);
 
         // Crear un evento de animacion rotación
-        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), auxGroupGiro);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(time), auxGroupGiro);
 
         switch (cara) {
             case 0 -> {
@@ -987,33 +1044,17 @@ public class A01_PruebasViewController extends Controller implements Initializab
         rotateTransition.setOnFinished((ActionEvent event) -> {
             rellenarCubo();
             manejoBotones(Boolean.FALSE);
+            if (contadorDesarmar < 15) {
+                System.out.println(contadorDesarmar);
+                contadorDesarmar++;
+                desarmarAleatorio();
+            }
+
         });
 
         // Iniciar la animación
         rotateTransition.play();
         manejoBotones(Boolean.TRUE);
-    }
-
-    // Metodo para rotacion animada/ NO IMPLEMENTADA/
-    private void groupGiroVertical(int columna, int giro, SmartGroup group) {
-        principalGroup.getChildren().remove(group);
-        loadCubesFaces3DAux.clear();
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                for (int k = 0; k < deep; k++) {
-                    if (j == columna) {
-//                        loadCubesFaces3DAux.add(matriz3D[i][j][k].getCubito());
-                    }
-                }
-            }
-        }
-        group.getChildren().clear();
-        group.getChildren().addAll(loadCubesFaces3DAux);
-
-        group.rotateByX(giro);
-        principalGroup.getChildren().add(group);
-        principalGroup.getChildren().clear();
     }
 
     // Activar o desactivar botones
