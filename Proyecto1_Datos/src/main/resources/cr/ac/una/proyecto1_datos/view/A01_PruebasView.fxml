@@ -137,5 +137,6 @@
          </children>
       </HBox>
       <MFXButton fx:id="btnArriba" buttonType="RAISED" layoutX="1004.0" layoutY="35.0" onAction="#onAntionBtnArriba" text="Arriba" />
+      <MFXButton fx:id="btnSolucionar" buttonType="RAISED" layoutX="1006.0" layoutY="78.0" onAction="#onAntionBtnSolucionar" text="Solucionar" />
    </children>
 </AnchorPane>

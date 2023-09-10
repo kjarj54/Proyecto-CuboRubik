@@ -7,12 +7,11 @@ import cr.ac.una.proyecto1_datos.util.FlowController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.RotateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -105,6 +104,9 @@ public class A01_PruebasViewController extends Controller implements Initializab
     int column = 3;
     int deep = 3;
     int contadorDesarmar = 0; // Contador de animaciones completadas
+    int contadorArmar = 0; // Contador de animaciones completadas
+    Boolean desarmar = false;
+    Boolean armar = false;
 
     // Matriz de 3 dimensiones para almacenar objetos de tipo cubito
     Cubito[][][] matriz3D = new Cubito[3][3][3];
@@ -119,7 +121,11 @@ public class A01_PruebasViewController extends Controller implements Initializab
     // Lista que guarda todas las caras de los cubos
     List<Group> loadCubesFaces3D;
 
+    List<List<String>> movimientos = new ArrayList<>();
+
     Cubo3D cubo3D = new Cubo3D();
+    @FXML
+    private MFXButton btnSolucionar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -190,6 +196,11 @@ public class A01_PruebasViewController extends Controller implements Initializab
     private void onAntionBtnArriba(ActionEvent event) {
         // Boton hacer pruebas varias
         desarmarAleatorio();
+    }
+
+    @FXML
+    private void onAntionBtnSolucionar(ActionEvent event) {
+        armarCubo();
     }
 
     // Metodo que carga toda la pantalla principal
@@ -270,31 +281,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
                 }
             }
         }
-//        contador = 0;
-//        principalGroup.getChildren().addAll(loadCubesFaces3D);
-        // Por si llega a hacer alguna animacion de giro...
-//        int ejeX = -100, ejeY = -100, ejeZ = -100;
-//        // Inicializar la matriz con algunos valores
-//        for (int i = 0; i < row; i++) {
-//            for (int j = 0; j < column; j++) {
-//                for (int k = 0; k < deep; k++) {
-//                    if (contador == 13) {
-//                        ejeZ += 100;
-//                        contador++;
-//                        continue;
-//                    }
-//                    loadCubesFaces3D.get(contador).setTranslateX(ejeX);
-//                    loadCubesFaces3D.get(contador).setTranslateY(ejeY);
-//                    loadCubesFaces3D.get(contador).setTranslateZ(ejeZ);
-//                    
-//                    ejeZ += 100;
-//                }
-//                ejeZ = -100;
-//                ejeX += 100;
-//            }
-//            ejeX = -100;
-//            ejeY += 100;
-//        }
         principalGroup.getChildren().addAll(loadCubesFaces3D);
     }
 
@@ -800,7 +786,9 @@ public class A01_PruebasViewController extends Controller implements Initializab
 
             }
         }
-        //despues de hacer las respectivas rotaciones repinta el cubo3D
+        if (!armar) {
+            movimientos.add(Arrays.asList(Integer.toString(opcion), direccion)); //0,3,4
+        }//despues de hacer las respectivas rotaciones repinta el cubo3D
 //        rellenarCubo();
     }
 
@@ -985,11 +973,54 @@ public class A01_PruebasViewController extends Controller implements Initializab
         });
     }
 
+    private void armarCubo() {
+        contadorArmar = movimientos.size() - 1;
+        int cara = Integer.parseInt(movimientos.get(contadorArmar).get(0));
+        String direccion = movimientos.get(contadorArmar).get(1);
+        armar = true;
+
+        if (direccion.equals("right0")) {
+            ejecutarAccion(cara, "left0", (float) 0.5);
+        }
+        if (direccion.equals("right2")) {
+            ejecutarAccion(cara, "left2", (float) 0.5);
+        }
+        if (direccion.equals("left0")) {
+            ejecutarAccion(cara, "right0", (float) 0.5);
+        }
+        if (direccion.equals("left2")) {
+            ejecutarAccion(cara, "right2", (float) 0.5);
+        }
+        if (direccion.equals("up0")) {
+            ejecutarAccion(cara, "down0", (float) 0.5);
+        }
+        if (direccion.equals("up2")) {
+            ejecutarAccion(cara, "down2", (float) 0.5);
+        }
+        if (direccion.equals("down0")) {
+            ejecutarAccion(cara, "up0", (float) 0.5);
+        }
+        if (direccion.equals("down2")) {
+            ejecutarAccion(cara, "up2", (float) 0.5);
+        }
+        if (direccion.equals("hora")) {
+            ejecutarAccion(cara, "antihora", (float) 0.5);
+        }
+        if (direccion.equals("antihora")) {
+            ejecutarAccion(cara, "hora", (float) 0.5);
+        }
+
+        System.out.println(movimientos.get(contadorArmar));
+        System.out.println(movimientos.size());
+
+        movimientos.remove(contadorArmar);
+    }
+
     private void desarmarAleatorio() {
+        Random random = new Random();
         int[] caras = {0, 1, 2, 3, 40, 41, 42, 43, 50, 51, 52, 53};
         String[] direcciones = {"right0", "right2", "left0", "left2", "up0", "up2", "down0", "down2", "hora", "antihora"};
-
-        Random random = new Random();
+        desarmar = true;
 
         int aux1;
         int aux2;
@@ -997,7 +1028,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
         aux1 = random.nextInt(caras.length);
         aux2 = random.nextInt(direcciones.length);
         ejecutarAccion(caras[aux1], direcciones[aux2], (float) 0.5);
-        System.out.println(aux1 + "  " + aux2);
     }
 
     // Metodo para rotacion animada
@@ -1044,10 +1074,13 @@ public class A01_PruebasViewController extends Controller implements Initializab
         rotateTransition.setOnFinished((ActionEvent event) -> {
             rellenarCubo();
             manejoBotones(Boolean.FALSE);
-            if (contadorDesarmar < 15) {
-                System.out.println(contadorDesarmar);
+            if (contadorDesarmar < 15 && desarmar) {
                 contadorDesarmar++;
                 desarmarAleatorio();
+            }
+
+            if (contadorArmar > 0 && armar) {
+                armarCubo();
             }
 
         });
