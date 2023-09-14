@@ -4,6 +4,7 @@
  */
 package cr.ac.una.proyecto1_datos.util;
 
+import cr.ac.una.proyecto1_datos.model.Jugador;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -27,16 +28,20 @@ public class ManejoDatos {
     private static final String TXT_PATH = "src/main/java/cr/ac/una/proyecto1_datos/model/datos.txt";
     private static final String TXT_PATH_RECORDS = "src/main/java/cr/ac/una/proyecto1_datos/model/records.txt";
     private Stack<Object[]> dataStack;
+    private Stack<String> recordStack;
 
     public ManejoDatos() {
         dataStack = new Stack<>();
+        recordStack = new Stack<>();
     }
 
     public void pushData(Object... attributes) {
         dataStack.push(attributes);
     }
-    
-    public void saveRecordTime(String time) {//Guarda el tiempo que se le pase por parametro
+
+    public void saveRecordTime(Jugador jugador) {//Guarda el tiempo que se le pase por parametro
+        recordStack.push(jugador.getName() + " " + jugador.getTime());  // Agrega el registro a la pila
+
         Path filePath = Paths.get(TXT_PATH_RECORDS);
 
         if (!Files.exists(filePath)) {
@@ -50,23 +55,25 @@ public class ManejoDatos {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toFile(), true))) {
-            writer.write(time);
-            writer.newLine();
+            while (!recordStack.isEmpty()) {
+                String record = recordStack.pop();  // Obtén el registro de la pila
+                writer.write(record);
+                writer.newLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     public List<String> getTopThreeTimes(String targetTime) {//Devuelve un array list con los tres mejores tiempos que esten en el documentos de los records 
-        Queue<String> topTimes = new PriorityQueue<>((t1, t2) -> {
-            return -t1.compareTo(t2);
-        });
+        PriorityQueue<String> topTimes = new PriorityQueue<>((t1, t2) -> -t1.compareTo(t2));
+        Stack<String> resultStack = new Stack<>();
 
         Path filePath = Paths.get(TXT_PATH_RECORDS);
 
         if (!Files.exists(filePath)) {
             System.out.println("El archivo de registros no existe.");
-            return new ArrayList<>();
+            return resultStack;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath.toFile()))) {
@@ -81,9 +88,10 @@ public class ManejoDatos {
             e.printStackTrace();
         }
 
-        return new ArrayList<>(topTimes);
-    }
+        resultStack.addAll(topTimes);
+        return resultStack;
 
+    }
 
     public void loadFromFile() {
         Path filePath = Paths.get(TXT_PATH);
