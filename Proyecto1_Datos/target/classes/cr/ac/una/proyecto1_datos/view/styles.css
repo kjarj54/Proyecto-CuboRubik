@@ -13,6 +13,43 @@
     -mfx-paused: true;
 }
 
+.mfx-button-inicio{
+    -fx-cursor: hand;
+    -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
+    -fx-font: 40px "Californian FB";
+    -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
+    -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
+    -fx-background-position: center; /* Centra la imagen en el botón */
+    -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+.mfx-button-inicio:hover{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-inicio:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 200, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-button-menuPrincipal{
+    -fx-cursor: hand;
+    -fx-min-width: 250px;   /* Ancho mínimo */
+    -fx-min-height: 50px;   /* Alto mínimo */
+    -fx-background-color: #333333; /* Establece el fondo del botón como transparente */
+    -fx-font: 20px "OCR a extended"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #FFFFFF; /* Color del texto */
+    -fx-background-radius: 0px;
+    -fx-padding: 0;  /*Elimina el relleno del botón */
+    -fx-transition: background-color 1s, -fx-scale-x 1; /* Transiciones de 0.3 segundos */
+}
+.mfx-button-menuPrincipal:hover{
+    -fx-background-color: #FFFFFF; /* Establece el fondo del botón como transparente */
+    -fx-text-fill: #000000;
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-menuPrincipal:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
 .mfx-button-Image{
     -fx-cursor: hand;
     -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
@@ -21,6 +58,13 @@
     -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
     -fx-background-position: center; /* Centra la imagen en el botón */
     -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+
+.imvFondoPantallaJuego{
+    -fx-background-image: url("../resources/media/fondo.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
 }
 
 .mfx-button-Image:hover{
@@ -33,3 +77,33 @@
 .mfx-button-Image:disabled{
     -fx-opacity: 0.4;
 }
+
+.button-48 {
+    -fx-background-color: #FFFFFF;
+    -fx-border-width: 0;
+    -fx-color: #000000;
+    -fx-cursor: hand;
+    -fx-font-family: "Clarkson,Helvetica,sans-serif";
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-letter-spacing: 0;
+    -fx-line-height: 1em;
+    -fx-margin: 0;
+    -fx-opacity: 1;
+    -fx-padding: 1.5em 2.2em;
+    -fx-text-fill: black;
+    -fx-text-decoration: none;
+    -fx-text-transform: uppercase;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.button-48:hover {
+    -fx-background-color: #EBEBEB;
+}
+
+.button-48 .label {
+    -fx-padding: 0; /* Modify as needed */
+}
+
+

@@ -34,6 +34,7 @@ import static javafx.scene.input.KeyCode.W;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Line;
@@ -53,8 +54,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
 
     @FXML
     private AnchorPane root;
-    @FXML
-    private ImageView imvBackground;
     @FXML
     private SubScene subScene;
     @FXML

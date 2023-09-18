@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.proyecto1_datos.controller.P01_PrincipalViewController">
+   <center>
+      <AnchorPane fx:id="acPanePrincipal" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <children>
+            <MediaView fx:id="mdvVideoIntro" fitHeight="720.0" fitWidth="1280.0" />
+            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <MFXButton fx:id="btnIngresar" onAction="#onActionBtnIngresar" styleClass="mfx-button-inicio" text="Presione una tecla para iniciar">
+                     <font>
+                        <Font name="Californian FB" size="35.0" />
+                     </font>
+                  </MFXButton>
+               </children>
+               <padding>
+                  <Insets bottom="80.0" />
+               </padding>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
