@@ -84,6 +84,7 @@ public class FlowController {
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_MenuView.fxml"), this.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
             FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/A01_PruebasView.fxml"), this.idioma)));
+//FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_JugadorView.fxml"), this.idioma)));
 
             FlowController.mainStage.show();
         } catch (IOException ex) {
