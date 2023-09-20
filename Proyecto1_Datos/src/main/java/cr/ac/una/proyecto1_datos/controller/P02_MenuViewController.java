@@ -1,7 +1,9 @@
 package cr.ac.una.proyecto1_datos.controller;
 
+import cr.ac.una.proyecto1_datos.util.FlowController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -13,6 +15,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * FXML Controller class
@@ -46,24 +50,29 @@ public class P02_MenuViewController extends Controller implements Initializable 
 
     @Override
     public void initialize() {
-        
+
     }
 
     @FXML
     private void onActionBtnNuevaPartida(ActionEvent event) {
-        mouseSound();
+        mouseEnterSound();
+        FlowController.getInstance().goView("P03_JugadorView");
     }
 
     @FXML
     private void onActionBtnContinuarPartida(ActionEvent event) {
+        mouseEnterSound();
     }
 
     @FXML
     private void onActionBtnAcercaDe(ActionEvent event) {
+        mouseEnterSound();
     }
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        mouseEnterSound();
+        FlowController.getInstance().salir();
     }
 
     private void loadVideo() {
@@ -83,35 +92,42 @@ public class P02_MenuViewController extends Controller implements Initializable 
         mdvMenu.setPreserveRatio(false);
         mediaPlayer.setAutoPlay(true);
     }
-    
+
     private void onActionMouse() {
         btnNuevaPartida.setOnMouseEntered(event -> {
-            mouseSound();
+            mouseHoverSound();
         });
         btnContinuarPartida.setOnMouseEntered(event -> {
-            mouseSound();
+            mouseHoverSound();
         });
         btnAcercaDe.setOnMouseEntered(event -> {
-            mouseSound();
+            mouseHoverSound();
         });
         btnSalir.setOnMouseEntered(event -> {
-            mouseSound();
+            mouseHoverSound();
         });
     }
-    
-    private void mouseSound() {
-        try{
-        File soundFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/hoverMouse.wav");
 
-        Clip sound = AudioSystem.getClip();
-        sound.open(AudioSystem.getAudioInputStream(soundFile));
-        sound.start();
-        } catch(Exception ex){
-            
+    private void mouseHoverSound() {
+        try {
+            File soundFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/hoverMouse.wav");
+
+            Clip sound = AudioSystem.getClip();
+            sound.open(AudioSystem.getAudioInputStream(soundFile));
+            sound.start();
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
         }
-        
     }
-    
-    
+
+    private void mouseEnterSound() {
+        try {
+            File soundFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/enterSound.wav");
+
+            Clip sound = AudioSystem.getClip();
+            sound.open(AudioSystem.getAudioInputStream(soundFile));
+            sound.start();
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+        }
+    }
 
 }

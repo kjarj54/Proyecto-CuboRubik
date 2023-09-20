@@ -95,3 +95,44 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
+
+.mfx-radio-button{
+    -fx-font: 20px "OCR a extended"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -mfx-main: #000000;
+    -mfx-secondary: #424242;
+}
+
+.mfx-text-field-edit {
+    -mfx-main: #000000;
+    -fx-background-color: #999999;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-font: 20px "OCR a extended";
+}
+
+.mfx-text-field-edit .floating-text {
+	-fx-font: 20px "OCR a extended";
+	-fx-text-fill: -mfx-text-he;
+        -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-text-field-edit:floating .floating-text {
+	-fx-background-color: transparent;
+        -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.panel-transparencia{
+    -fx-background-color: rgba(0, 0, 0, 0.35); /* Establece la fuente y el tamano */
+    -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
+    -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
+    -fx-background-position: center; /* Centra la imagen en el botón */
+    -fx-background-radius: 10px;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}

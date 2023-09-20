@@ -3,6 +3,7 @@ package cr.ac.una.proyecto1_datos.controller;
 import cr.ac.una.proyecto1_datos.util.FlowController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -10,12 +11,15 @@ import java.util.TimerTask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * FXML Controller class
@@ -31,6 +35,8 @@ public class P01_PrincipalViewController extends Controller implements Initializ
     @FXML
     private MFXButton btnIngresar;
 
+    MediaPlayer mediaPlayer;
+
     /**
      * Initializes the controller class.
      */
@@ -39,6 +45,7 @@ public class P01_PrincipalViewController extends Controller implements Initializ
         // TODO
         btnIngresar.setVisible(false);
         loadVideo();
+
     }
 
     @Override
@@ -47,16 +54,17 @@ public class P01_PrincipalViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnIngresar(ActionEvent event) {
+        mediaPlayer.setCycleCount(0);
+        mediaPlayer.stop();
         soundEnter();
         FlowController.getInstance().goView("P02_MenuView");
-        
     }
 
     private void loadVideo() {
         String videoFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/IntroPrincipalView.mp4").getAbsolutePath();
 
         Media media = new Media(new File(videoFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer = new MediaPlayer(media);
 
         mdvVideoIntro.setMediaPlayer(mediaPlayer);
 
@@ -78,6 +86,14 @@ public class P01_PrincipalViewController extends Controller implements Initializ
             public void run() {
                 // Coloca aquí la acción que deseas ejecutar después de unos segundos
                 btnIngresar.setVisible(true);
+                // Captura eventos del teclado para continuar
+                Scene scene = FlowController.getInstance().getMainScene();
+                scene.setOnKeyPressed(event -> {
+                    mediaPlayer.setCycleCount(0);
+                    mediaPlayer.stop();
+                    soundEnter();
+                    FlowController.getInstance().goView("P02_MenuView");
+                });
             }
         };
 
@@ -92,8 +108,7 @@ public class P01_PrincipalViewController extends Controller implements Initializ
             Clip sound = AudioSystem.getClip();
             sound.open(AudioSystem.getAudioInputStream(soundFile));
             sound.start();
-        } catch (Exception ex) {
-
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
         }
     }
 
