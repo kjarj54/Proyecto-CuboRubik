@@ -1,30 +1,39 @@
 package cr.ac.una.proyecto1_datos.model;
 
-import java.time.LocalDate;
-
 /**
  *
  * @author Luvara
  */
 public class Jugador {
 
-    String name;
-    int points;
-    int moves;
-    String time;
+    private String name;
+    private String modoJuego;
+    private int points;
+    private int moves;
+    private String time;
 
-    public Jugador(String name, int points, String time) {
+    public Jugador(String name, String modoJuego, int points, int moves, String time) {
         this.name = name;
+        this.modoJuego = modoJuego;
         this.points = points;
+        this.moves = moves;
         this.time = time;
     }
-    
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getModoJuego() {
+        return modoJuego;
+    }
+
+    public void setModoJuego(String modoJuego) {
+        this.modoJuego = modoJuego;
     }
 
     public int getPoints() {
@@ -50,9 +59,10 @@ public class Jugador {
     public void setTime(String time) {
         this.time = time;
     }
-    
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "Jugador{" + "name=" + name + ", modoJuego=" + modoJuego + ", points=" + points + ", moves=" + moves + ", time=" + time + '}';
+    }
 
 }

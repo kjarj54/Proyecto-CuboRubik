@@ -69,7 +69,7 @@ public class FlowController {
                         loader = new FXMLLoader(App.class.getResource("view/" + name + ".fxml"), this.idioma);
                         loader.load();
                         loaders.put(name, loader);
-                    } catch (Exception ex) {
+                    } catch (IOException ex) {
                         loader = null;
                         java.util.logging.Logger.getLogger(FlowController.class.getName()).log(Level.SEVERE, "Creando loader [" + name + "].", ex);
                     }
@@ -82,9 +82,12 @@ public class FlowController {
     public void goMain() {
         try {
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_MenuView.fxml"), this.idioma)));
-            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
+//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/A01_PruebasView.fxml"), this.idioma)));
-//FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_JugadorView.fxml"), this.idioma)));
+//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_RegistroJugadorView.fxml"), this.idioma)));
+//FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/loginPruebaView.fxml"), this.idioma)));
+            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P05_ModoManualView.fxml"), this.idioma)));
+
 
             FlowController.mainStage.show();
         } catch (IOException ex) {

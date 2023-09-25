@@ -2,8 +2,11 @@ package cr.ac.una.proyecto1_datos.controller;
 
 import cr.ac.una.proyecto1_datos.model.Cubito;
 import cr.ac.una.proyecto1_datos.model.Cubo3D;
+import cr.ac.una.proyecto1_datos.model.Jugador;
+import cr.ac.una.proyecto1_datos.util.AppContext;
 import cr.ac.una.proyecto1_datos.util.Cronometro;
 import cr.ac.una.proyecto1_datos.util.FlowController;
+import cr.ac.una.proyecto1_datos.util.Mensaje;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import static javafx.scene.input.KeyCode.A;
 import static javafx.scene.input.KeyCode.D;
@@ -55,8 +60,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
     @FXML
     private SubScene subScene;
     @FXML
-    private MFXButton btnArriba;
-    @FXML
     private MFXButton btnDerechaFila1;
     @FXML
     private MFXButton btnIzquierdaFila1;
@@ -76,11 +79,30 @@ public class A01_PruebasViewController extends Controller implements Initializab
     private MFXButton btnRotarReloj;
     @FXML
     private MFXButton btnRotarAntireloj;
+    @FXML
+    private MFXButton btnSolucionar;
+    @FXML
+    private MFXButton btnIniciarPartida;
+    @FXML
+    private MFXButton btnGuardarSalir;
+    @FXML
+    private MFXButton btnDesarmarAleatorio;
+    @FXML
+    private MFXButton btnPruebas;
+    @FXML
+    private Label lblNombre;
+    @FXML
+    private Label lblTiempo;
+    @FXML
+    private Label lblMovimientos;
+    @FXML
+    private Label lblPuntos;
 
+    // Variables Globales-------------------------------------------------------
+    // Variables para los giros del cubo con el mouse
     private double anchorX, anchorY;
     private double anchorAngleX = 0;
     private double anchorAngleY = 0;
-
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
@@ -100,103 +122,139 @@ public class A01_PruebasViewController extends Controller implements Initializab
     int row = 3;
     int column = 3;
     int deep = 3;
-    int contadorDesarmar = 0; // Contador de animaciones completadas
-    int contadorArmar = 0; // Contador de animaciones completadas
-    Boolean desarmar = false;
-    Boolean armar = false;
-
+    
     // Matriz de 3 dimensiones para almacenar objetos de tipo cubito
     Cubito[][][] matriz3D = new Cubito[3][3][3];
-    Cubito cubito;
-    Cronometro cronometro;
+    
+    int contadorArmar = 0; // Contador de animaciones completadas
+    int contadorMovimientos;
 
-    // Variable para almacenar el cubo3D completo y mostrar en pantalla
+    // Booleanos para el control de diversas funciones
+    Boolean armar = false;
+
     // Grupo principal en pantalla para el cubo3D completo
     SmartGroup principalGroup = new SmartGroup();
-//    SmartGroup auxGroupGiro = new SmartGroup();
-    List<Group> loadCubesFaces3DAux = new ArrayList<>();
+
     // Lista que guarda todas las caras de los cubos
     List<Group> loadCubesFaces3D;
-
+    
+    // Lista utilizada en vez de la pila para pruebas. Guarda la cara y el movimiento
     List<List<String>> movimientos = new ArrayList<>();
 
+    // Declarar las diferentes clases y librerias
+    Cubito cubito;
     Cubo3D cubo3D = new Cubo3D();
-    @FXML
-    private MFXButton btnSolucionar;
+    Jugador jugador;
+    Cronometro cronometro;
+    Random rand = new Random();
+    // FIN Variables Globales-------------------------------------------------------
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
 //        face4.addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
+//        jugador = (Jugador) AppContext.getInstance().get("Jugador");
+//        System.out.println( jugador.toString());
         iniciarScena();
-//        cronometro = new Cronometro();// Inicializa el cronometro en 0
+        onActionsGiros();
+        cronometro = new Cronometro(lblTiempo);// Inicializa el cronometro en 0
+
 //        cronometro.startCronometro(); // Inicia o continua el cronometro o hilo
 //        cronometro.stopCronometro();  // Pausa el cronometro o hilo
+        btnPruebas.setOnAction(event -> {
+            for (int i = 0; i < row; i++) {
+                System.out.println("Capa " + (i + 1) + ":");
+                for (int j = 0; j < column; j++) {
+                    for (int k = 0; k < deep; k++) {
+                        if (i == 1 && j == 1 && k == 1) {
+                            continue;
+                        }
+                        System.out.print(matriz3D[i][j][k].getId() + " ");
 
+                    }
+                    System.out.println();
+                }
+                System.out.println();
+            }
+        });
+
+    }
+
+    public void imprimirPuntosMovimientos() {
+        int puntos = cronometro.getTime() / contadorMovimientos * 100;
+
+        String pointsStr = String.format("%04d", puntos); // Formatea los minutos con cuatro dígitos
+        String movesStr = String.format("%02d", contadorMovimientos); // Formatea los minutos con cuatro dígitos
+
+        lblMovimientos.setText("Movimientos:" + movesStr);
+        lblPuntos.setText("Puntos: " + pointsStr);
     }
 
     @Override
     public void initialize() {
     }
 
+    private void comprobarArmado() {
+        int contador = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                for (int k = 0; k < deep; k++) {
+
+                    if (i == 1 && j == 1 && k == 1) {
+                        contador++;
+                        continue;
+                    }
+                    if (matriz3D[i][j][k].getId() == contador) {
+                        contador++;
+                    }
+                }
+            }
+        }
+        if (contador == 27) {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cubo completado", getStage(),
+                    "Felicidades has completado el cubo.");
+            manejoBotones(true);
+        }
+    }
+
+    // Variables para el boton IniciarPartida
+    Boolean partidaIniciada = false;
+
     @FXML
-    private void onActionBtnDerechaFila1(ActionEvent event) {
-        ejecutarAccion(-1, "right0", 1);
+    private void onActionBtnIniciarPartida(ActionEvent event) {
+        if (movimientos.size() < 15) {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Error de inicio", getStage(),
+                    "Es necesario hacer más movimientos de desarmar el cubo para iniciar la partida");
+        } else {
+            partidaIniciada = true;
+            btnDesarmarAleatorio.setDisable(true);
+            btnIniciarPartida.setDisable(true);
+            cronometro.startCronometro();
+            manejoBotones(true);
+        }
     }
 
     @FXML
-    private void onActionBtnDerechaFila3(ActionEvent event) {
-        ejecutarAccion(-1, "right2", 1);
+    private void onActionBtnGuardarSalir(ActionEvent event) {
     }
 
-    @FXML
-    private void onActionBtnIzquierdaFila1(ActionEvent event) {
-        ejecutarAccion(-1, "left0", 1);
-    }
+    // Variables para el boton desarmarAleatorio
+    int movimientosAleatorios;// Control para los movimientos aleatorios
+    int contadorDesarmar = 0; // Contador de animaciones completadas
+    Boolean desarmar = false;
 
     @FXML
-    private void onActionBtnIzquierdaFila3(ActionEvent event) {
-        ejecutarAccion(-1, "left2", 1);
-    }
-
-    @FXML
-    private void onActionBtnArribaColumna1(ActionEvent event) {
-        ejecutarAccion(-1, "up0", 1);
-    }
-
-    @FXML
-    private void onActionBtnArribaColumna3(ActionEvent event) {
-        ejecutarAccion(-1, "up2", 1);
-    }
-
-    @FXML
-    private void onActionBtnAbajoColumna1(ActionEvent event) {
-        ejecutarAccion(-1, "down0", 1);
-    }
-
-    @FXML
-    private void onActionBtnAbajoColumna3(ActionEvent event) {
-        ejecutarAccion(-1, "down2", 1);
-    }
-
-    @FXML
-    private void onActionBtnRotarReloj(ActionEvent event) {
-        ejecutarAccion(-1, "hora", 1);
-    }
-
-    @FXML
-    private void onActionBtnRotarAntireloj(ActionEvent event) {
-        ejecutarAccion(-1, "antihora", 1);
-    }
-
-    @FXML
-    private void onAntionBtnArriba(ActionEvent event) {
-        // Boton hacer pruebas varias
+    private void onActionBtnDesarmarAleatorio(ActionEvent event) {
+        movimientosAleatorios = rand.nextInt(11) + 15;
+        desarmar = true;
+        System.out.println(movimientosAleatorios);
         desarmarAleatorio();
+        btnDesarmarAleatorio.setDisable(true);
+        manejoBotones(true);
     }
 
     @FXML
-    private void onAntionBtnSolucionar(ActionEvent event) {
+    private void onActionBtnSolucionar(ActionEvent event) {
         armarCubo();
     }
 
@@ -252,12 +310,48 @@ public class A01_PruebasViewController extends Controller implements Initializab
         principalGroup.translateXProperty().set(250);
         principalGroup.translateYProperty().set(260);
         principalGroup.translateZProperty().set(200);
+        angleX.set(20);
+        angleY.set(-20);
 
         punterosMouse(principalGroup);
         initMouseControl(principalGroup, subScene);
-        crearLineasEje(principalGroup);
         rellenarCubo();
+
 //      manejadores(groupCen);
+    }
+
+    // Metodo para el manejo de los botones del movimientos del cubo
+    private void onActionsGiros() {
+        btnDerechaFila1.setOnAction(event -> {
+            ejecutarAccion(-1, "right0", 1);
+        });
+        btnIzquierdaFila1.setOnAction(event -> {
+            ejecutarAccion(-1, "left0", 1);
+        });
+        btnDerechaFila3.setOnAction(event -> {
+            ejecutarAccion(-1, "right2", 1);
+        });
+        btnIzquierdaFila3.setOnAction(event -> {
+            ejecutarAccion(-1, "left2", 1);
+        });
+        btnArribaColumna1.setOnAction(event -> {
+            ejecutarAccion(-1, "up0", 1);
+        });
+        btnAbajoColumna1.setOnAction(event -> {
+            ejecutarAccion(-1, "down0", 1);
+        });
+        btnArribaColumna3.setOnAction(event -> {
+            ejecutarAccion(-1, "up2", 1);
+        });
+        btnAbajoColumna3.setOnAction(event -> {
+            ejecutarAccion(-1, "down2", 1);
+        });
+        btnRotarReloj.setOnAction(event -> {
+            ejecutarAccion(-1, "hora", 1);
+        });
+        btnRotarAntireloj.setOnAction(event -> {
+            ejecutarAccion(-1, "antihora", 1);
+        });
     }
 
     // Metodo que vuelve a dibujar el cubo3D en pantalla con las posiciones actualizadas
@@ -307,26 +401,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
         return false;
     }
 
-    // Metodo que agrega líneas que representan los ejes X, Y y Z
-    private void crearLineasEje(SmartGroup group) {
-
-        Line xAxis = new Line(0, 0, 300, 0);
-        Line yAxis = new Line(0, 0, 0, 300);
-        Line zAxis = new Line(0, 0, 0, -300);
-
-        // Colorea las lineas
-        xAxis.setStroke(Color.RED);
-        yAxis.setStroke(Color.GREEN);
-        zAxis.setStroke(Color.BLUE);
-
-        // Aumentar el grosor de las líneas
-        xAxis.setStrokeWidth(3);
-        yAxis.setStrokeWidth(3);
-        zAxis.setStrokeWidth(3);
-
-        group.getChildren().addAll(xAxis, yAxis, zAxis);
-    }
-
     // Metodo que habilita funciones del teclado/ NO IMPLEMENTADO AUN/
     private void manejadores(SmartGroup group) {
         FlowController flowController = FlowController.getInstance();
@@ -347,62 +421,6 @@ public class A01_PruebasViewController extends Controller implements Initializab
                 case D ->
                     group.rotateByY(-10);
             }
-        });
-    }
-
-    // Metodo para el manejo del mouse del cubo3D, angulos, giros y rotaciones
-    private void initMouseControl(SmartGroup group, SubScene scene) {
-        Rotate xRotate;
-        Rotate yRotate;
-        group.getTransforms().addAll(
-                xRotate = new Rotate(0, Rotate.X_AXIS),
-                yRotate = new Rotate(0, Rotate.Y_AXIS)
-        );
-        xRotate.angleProperty().bind(angleX);
-        yRotate.angleProperty().bind(angleY);
-
-        scene.setOnMousePressed(event -> {
-            anchorX = event.getSceneX();
-            anchorY = event.getSceneY();
-            anchorAngleX = angleX.get();
-            anchorAngleY = angleY.get();
-        });
-
-        scene.setOnMouseDragged((var event) -> {
-            double newAngleX = anchorAngleX - (anchorY - event.getSceneY());
-            double newAngleY = anchorAngleY + anchorX - event.getSceneX();
-
-            // Reiniciar los ángulos a 0 cuando exceden 360 grados
-            if (newAngleY >= 360) {
-                newAngleY -= 360;
-            }
-            if (newAngleY <= -360) {
-                newAngleY += 360;
-            }
-            // limita la rotacion del eje x, arriba, abajo
-            newAngleX = Math.max(-90, Math.min(90, newAngleX));
-
-            angleX.set(newAngleX);
-            angleY.set(newAngleY);
-        });
-
-        scene.setOnMouseReleased(event -> {
-            anchorAngleX = angleX.get();
-            anchorAngleY = angleY.get();
-        });
-
-        scene.addEventHandler(ScrollEvent.SCROLL, event -> {
-            // Define los límites de zoom
-            double minZoom = -100;  // Zoom mínimo
-            double maxZoom = 500;   // Zoom máximo
-
-            // Obtén el cambio de desplazamiento en el eje Y
-            double delta = event.getDeltaY();
-
-            // Actualiza la propiedad de traslación Z con limitación
-            double newZoom = group.getTranslateZ() + delta;
-            newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
-            group.translateZProperty().set(newZoom);
         });
     }
 
@@ -785,7 +803,13 @@ public class A01_PruebasViewController extends Controller implements Initializab
         }
         if (!armar) {
             movimientos.add(Arrays.asList(Integer.toString(opcion), direccion)); //0,3,4
-        }//despues de hacer las respectivas rotaciones repinta el cubo3D
+        }
+        if (partidaIniciada) {
+            contadorMovimientos++;
+            imprimirPuntosMovimientos();
+        }
+        comprobarArmado();
+//despues de hacer las respectivas rotaciones repinta el cubo3D
 //        rellenarCubo();
     }
 
@@ -1013,17 +1037,27 @@ public class A01_PruebasViewController extends Controller implements Initializab
         movimientos.remove(contadorArmar);
     }
 
+    // Variables para el metodo de armar cubo
+    int aux1;
+    int aux2 = 0;
+    int anterior = 0;
+
     private void desarmarAleatorio() {
-        Random random = new Random();
         int[] caras = {0, 1, 2, 3, 40, 41, 42, 43, 50, 51, 52, 53};
-        String[] direcciones = {"right0", "right2", "left0", "left2", "up0", "up2", "down0", "down2", "hora", "antihora"};
-        desarmar = true;
+        String[] direcciones = {"right0", "left0", "right2", "left2", "up0", "down0", "up2", "down2", "hora", "antihora"};
 
-        int aux1;
-        int aux2;
+        if (anterior % 2 == 0) {
+            anterior++;
+        } else {
+            anterior--;
+        }
+        // Ciclo para que no haga un moviento inverso al anterior moviento
+        do {
+            aux1 = rand.nextInt(caras.length);
+            aux2 = rand.nextInt(direcciones.length);
+        } while (aux2 == anterior);
 
-        aux1 = random.nextInt(caras.length);
-        aux2 = random.nextInt(direcciones.length);
+        anterior = aux2;
         ejecutarAccion(caras[aux1], direcciones[aux2], (float) 0.5);
     }
 
@@ -1071,7 +1105,7 @@ public class A01_PruebasViewController extends Controller implements Initializab
         rotateTransition.setOnFinished((ActionEvent event) -> {
             rellenarCubo();
             manejoBotones(Boolean.FALSE);
-            if (contadorDesarmar < 15 && desarmar) {
+            if (contadorDesarmar <= movimientosAleatorios && desarmar) {
                 contadorDesarmar++;
                 desarmarAleatorio();
             }
@@ -1102,6 +1136,62 @@ public class A01_PruebasViewController extends Controller implements Initializab
         btnRotarAntireloj.setDisable(active);
     }
 
+    // Metodo para el manejo del mouse del cubo3D, angulos, giros y rotaciones
+    private void initMouseControl(SmartGroup group, SubScene scene) {
+        Rotate xRotate;
+        Rotate yRotate;
+        group.getTransforms().addAll(
+                xRotate = new Rotate(0, Rotate.X_AXIS),
+                yRotate = new Rotate(0, Rotate.Y_AXIS)
+        );
+        xRotate.angleProperty().bind(angleX);
+        yRotate.angleProperty().bind(angleY);
+
+        scene.setOnMousePressed(event -> {
+            anchorX = event.getSceneX();
+            anchorY = event.getSceneY();
+            anchorAngleX = angleX.get();
+            anchorAngleY = angleY.get();
+        });
+
+        scene.setOnMouseDragged((var event) -> {
+            double newAngleX = anchorAngleX - (anchorY - event.getSceneY());
+            double newAngleY = anchorAngleY + anchorX - event.getSceneX();
+
+            // Reiniciar los ángulos a 0 cuando exceden 360 grados
+            if (newAngleY >= 360) {
+                newAngleY -= 360;
+            }
+            if (newAngleY <= -360) {
+                newAngleY += 360;
+            }
+            // limita la rotacion del eje x, arriba, abajo
+            newAngleX = Math.max(-90, Math.min(90, newAngleX));
+
+            angleX.set(newAngleX);
+            angleY.set(newAngleY);
+        });
+
+        scene.setOnMouseReleased(event -> {
+            anchorAngleX = angleX.get();
+            anchorAngleY = angleY.get();
+        });
+
+        scene.addEventHandler(ScrollEvent.SCROLL, event -> {
+            // Define los límites de zoom
+            double minZoom = -100;  // Zoom mínimo
+            double maxZoom = 500;   // Zoom máximo
+
+            // Obtén el cambio de desplazamiento en el eje Y
+            double delta = event.getDeltaY();
+
+            // Actualiza la propiedad de traslación Z con limitación
+            double newZoom = group.getTranslateZ() + delta;
+            newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
+            group.translateZProperty().set(newZoom);
+        });
+    }
+
     // Clase que extiende a group para aplicar los giros y rotaciones
     class SmartGroup extends Group {
 
@@ -1124,5 +1214,25 @@ public class A01_PruebasViewController extends Controller implements Initializab
             this.getTransforms().addAll(t);
             y1 = ang;
         }
+    }
+
+    // Metodo que agrega líneas que representan los ejes X, Y y Z
+    private void crearLineasEje(SmartGroup group) {
+
+        Line xAxis = new Line(0, 0, 300, 0);
+        Line yAxis = new Line(0, 0, 0, 300);
+        Line zAxis = new Line(0, 0, 0, -300);
+
+        // Colorea las lineas
+        xAxis.setStroke(Color.RED);
+        yAxis.setStroke(Color.GREEN);
+        zAxis.setStroke(Color.BLUE);
+
+        // Aumentar el grosor de las líneas
+        xAxis.setStrokeWidth(3);
+        yAxis.setStrokeWidth(3);
+        zAxis.setStrokeWidth(3);
+
+        group.getChildren().addAll(xAxis, yAxis, zAxis);
     }
 }

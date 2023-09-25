@@ -1,0 +1,91 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+.mfx-ripple-generator{
+    -mfx-animation-speed: 0;
+    -mfx-background-opacity: 0;
+    -mfx-ripple-radius: 0;
+    -mfx-paused: true;
+}
+
+.mfx-button-menuPrincipal, .mfx-button-menuSalir{
+    -fx-cursor: hand;
+    -fx-background-color: #333333; /* Establece el fondo del botón como transparente */
+    -fx-font: 20px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #FFFFFF; /* Color del texto */
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+.mfx-button-menuPrincipal:hover{
+    -fx-background-color: #FFFFFF; /* Establece el fondo del botón como transparente */
+    -fx-text-fill: #000000;
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-menuPrincipal:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-button-menuSalir:hover{
+    -fx-background-color: #cc0000; /* Establece el fondo del botón como transparente */
+    -fx-text-fill: #000000;
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-menuSalir:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-button-link{
+    -fx-cursor: hand;
+    -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
+    -fx-font: 15px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #6699ff; /* Color del texto */
+    -fx-underline: true;
+    -fx-content-display: text-only;
+    -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
+    -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
+    -fx-background-position: center; /* Centra la imagen en el botón */
+    -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+.mfx-button-link:hover{
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-link:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(0, 102, 204, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-text-field-edit {
+    -mfx-main: #000000;
+    -fx-background-color: #999999;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+    -fx-padding: 5;
+    -fx-font: 15px "Arial Rounded MT Bold";
+}
+
+.mfx-text-field-edit .floating-text {
+    
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: -mfx-text-he;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-text-field-edit:floating .floating-text {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.images-effect {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}

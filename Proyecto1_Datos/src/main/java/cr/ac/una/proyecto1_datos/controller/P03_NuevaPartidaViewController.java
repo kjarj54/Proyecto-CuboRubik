@@ -1,16 +1,20 @@
 package cr.ac.una.proyecto1_datos.controller;
 
+import cr.ac.una.proyecto1_datos.model.Jugador;
+import cr.ac.una.proyecto1_datos.util.AppContext;
 import cr.ac.una.proyecto1_datos.util.FlowController;
+import cr.ac.una.proyecto1_datos.util.Mensaje;
+import cr.ac.una.proyecto1_datos.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,17 +23,13 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * FXML Controller class
  *
  * @author Luvara
  */
-public class P03_JugadorViewController extends Controller implements Initializable {
+public class P03_NuevaPartidaViewController extends Controller implements Initializable {
 
     @FXML
     private MFXButton btnIniciar;
@@ -38,15 +38,19 @@ public class P03_JugadorViewController extends Controller implements Initializab
     @FXML
     private MediaView mdvFondoJugador;
     @FXML
-    private ToggleGroup tggModoJugo;
-    @FXML
     private AnchorPane root;
     @FXML
     private MFXRadioButton rdbAutomatico;
     @FXML
     private MFXRadioButton rdbManual;
     @FXML
-    private MFXTextField txfNombre = new MFXTextField();
+    private MFXTextField txfNombre;
+    @FXML
+    private MFXButton btnSalir;
+    @FXML
+    private ToggleGroup tggModoJuego;
+
+    Jugador jugador;
 
     /**
      * Initializes the controller class.
@@ -66,9 +70,24 @@ public class P03_JugadorViewController extends Controller implements Initializab
 
     @FXML
     private void onActionBtnIniciar(ActionEvent event) {
-        soundEnter();
-        FlowController.getInstance().goView("A01_PruebasView");
 
+        if (txfNombre.getText().isBlank()) {
+            SoundUtil.errorSound();
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Ingresar Jugador", getStage(), "Es necesario digitar un nombre para continuar");
+        } else {
+            SoundUtil.mouseEnterSound();
+            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0, 0, "0");
+            AppContext.getInstance().set("Jugador", jugador);
+            FlowController.getInstance().delete("P02_RegistroJugadoresView");
+            FlowController.getInstance().goView("A01_PruebasView");
+        }
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().delete("P02_RegistroJugadoresView");
+        FlowController.getInstance().goView("P02_MenuView");
     }
 
     private void loadVideo() {
@@ -95,7 +114,7 @@ public class P03_JugadorViewController extends Controller implements Initializab
             String imageFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/icons/playButton.gif").getAbsolutePath();
             Image image = new Image(new File(imageFile).toURI().toString());
             imvPlayButton.setImage(image);
-            mouseSound();
+            SoundUtil.mouseHoverSound();
         });
 
         btnIniciar.setOnMouseExited(event -> {
@@ -105,12 +124,20 @@ public class P03_JugadorViewController extends Controller implements Initializab
                 imvPlayButton.setImage(image);
             }
         });
+        
+        btnSalir.setOnMouseEntered(event -> {
+           SoundUtil.mouseHoverSound();
+        });
+        
+        txfNombre.setOnKeyReleased(event ->{
+        SoundUtil.keyTyping();
+        });
 
         rdbAutomatico.setOnMouseEntered(event -> {
-            mouseSound();
+            SoundUtil.mouseHoverSound();
         });
         rdbManual.setOnMouseEntered(event -> {
-            mouseSound();
+            SoundUtil.mouseHoverSound();
         });
 
         Stage stage1 = FlowController.getInstance().getMainStage();
@@ -120,25 +147,4 @@ public class P03_JugadorViewController extends Controller implements Initializab
         });
     }
 
-    private void mouseSound() {
-        try {
-            File soundFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/hoverMouse.wav");
-
-            Clip sound = AudioSystem.getClip();
-            sound.open(AudioSystem.getAudioInputStream(soundFile));
-            sound.start();
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-        }
-    }
-    
-    public void soundEnter() {
-        try {
-            File soundFile = new File("src/main/resources/cr/ac/una/proyecto1_datos/resources/media/pressButton.wav");
-
-            Clip sound = AudioSystem.getClip();
-            sound.open(AudioSystem.getAudioInputStream(soundFile));
-            sound.start();
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-        }
-    }
 }

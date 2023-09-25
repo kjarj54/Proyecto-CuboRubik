@@ -74,7 +74,7 @@ public class Cubo3D {
     }
 
     private void createGroup() {
-        int size = 0;
+        int size;
         List<int[]> list;
         for (int i = 0; i < listaListasCaras.size(); i++) {
             size = listaListasCaras.get(i).size();
@@ -94,6 +94,7 @@ public class Cubo3D {
 
         Group group = new Group(cuboMesh);
         group.setId(Integer.toString(contador));
+        contador++;
 
         return group;
     }
@@ -128,9 +129,9 @@ public class Cubo3D {
         cubeMesh.getFaces().addAll(face);
 
         // Asignar color a la cara específica
-//        PhongMaterial material = new PhongMaterial();
-//        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + faceColor + ".png");
-//        material.setDiffuseMap(textureImage);
+        // PhongMaterial material = new PhongMaterial();
+        // Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + faceColor + ".png");
+        // material.setDiffuseMap(textureImage);
         MeshView meshView = new MeshView(cubeMesh);
         meshView.setDrawMode(DrawMode.FILL); // Rellenar caras
         // meshView.setMaterial(material);
