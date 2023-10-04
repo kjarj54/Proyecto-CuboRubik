@@ -1,6 +1,7 @@
 package cr.ac.una.proyecto1_datos.controller;
 
 import cr.ac.una.proyecto1_datos.model.Jugador;
+import cr.ac.una.proyecto1_datos.model.Movimientos;
 import cr.ac.una.proyecto1_datos.util.AppContext;
 import cr.ac.una.proyecto1_datos.util.FlowController;
 import cr.ac.una.proyecto1_datos.util.Mensaje;
@@ -77,7 +78,7 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
             new Mensaje().showModal(Alert.AlertType.ERROR, "Ingresar Jugador", getStage(), "Es necesario digitar un nombre para continuar");
         } else {
             SoundUtil.mouseEnterSound();
-            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0, new Stack<String>(), "0");
+            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0,0, new Stack<>(), "0");
             AppContext.getInstance().set("Jugador", jugador);
             FlowController.getInstance().delete("P02_RegistroJugadoresView");
             FlowController.getInstance().goView("A01_PruebasView");

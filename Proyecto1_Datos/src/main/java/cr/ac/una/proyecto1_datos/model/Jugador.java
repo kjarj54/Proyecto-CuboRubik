@@ -11,14 +11,15 @@ public class Jugador {
     private String name;
     private String modoJuego;
     private int points;
-    private Stack<String> moves;
+    private int moves;
+    private Stack<Movimientos> movimientos;
     private String time;
 
-    public Jugador(String name, String modoJuego, int points, Stack<String> moves, String time) {
+    public Jugador(String name, String modoJuego, int points,int moves ,Stack<Movimientos> movimientos, String time) {
         this.name = name;
         this.modoJuego = modoJuego;
         this.points = points;
-        this.moves = moves;
+        this.movimientos = movimientos;
         this.time = time;
     }
 
@@ -46,12 +47,12 @@ public class Jugador {
         this.points = points;
     }
 
-    public Stack<String> getRecordStack() {
-        return moves;
+    public Stack<Movimientos> getRecordStack() {
+        return movimientos;
     }
 
-    public void setRecordStack(Stack<String> moves) {
-        this.moves = moves;
+    public void setRecordStack(Stack<Movimientos> movimientos) {
+        this.movimientos = movimientos;
     }
 
     public String getTime() {
