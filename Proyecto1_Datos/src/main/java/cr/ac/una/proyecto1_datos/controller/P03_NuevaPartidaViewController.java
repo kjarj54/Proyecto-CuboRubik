@@ -11,6 +11,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Stack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -76,7 +77,7 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
             new Mensaje().showModal(Alert.AlertType.ERROR, "Ingresar Jugador", getStage(), "Es necesario digitar un nombre para continuar");
         } else {
             SoundUtil.mouseEnterSound();
-            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0, 0, "0");
+            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0, new Stack<String>(), "0");
             AppContext.getInstance().set("Jugador", jugador);
             FlowController.getInstance().delete("P02_RegistroJugadoresView");
             FlowController.getInstance().goView("A01_PruebasView");

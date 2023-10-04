@@ -1,5 +1,7 @@
 package cr.ac.una.proyecto1_datos.model;
 
+import java.util.Stack;
+
 /**
  *
  * @author Luvara
@@ -9,10 +11,10 @@ public class Jugador {
     private String name;
     private String modoJuego;
     private int points;
-    private int moves;
+    private Stack<String> moves;
     private String time;
 
-    public Jugador(String name, String modoJuego, int points, int moves, String time) {
+    public Jugador(String name, String modoJuego, int points, Stack<String> moves, String time) {
         this.name = name;
         this.modoJuego = modoJuego;
         this.points = points;
@@ -44,11 +46,11 @@ public class Jugador {
         this.points = points;
     }
 
-    public int getMoves() {
+    public Stack<String> getRecordStack() {
         return moves;
     }
 
-    public void setMoves(int moves) {
+    public void setRecordStack(Stack<String> moves) {
         this.moves = moves;
     }
 
