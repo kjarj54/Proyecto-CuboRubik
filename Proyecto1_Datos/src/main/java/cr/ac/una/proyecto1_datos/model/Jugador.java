@@ -73,10 +73,10 @@ public class Jugador {
     public void setMoves(int moves) {
         this.moves = moves;
     }
-    
+
     @Override
     public String toString() {
-        return "Jugador{" + "name=" + name + ", modoJuego=" + modoJuego + ", points=" + points + ", moves=" + moves + ", time=" + time + '}';
+        return "Jugador{" + "name=" + name + ", modoJuego=" + modoJuego + ", points=" + points + ", moves=" + moves + ", movimientos=" + movimientos + ", time=" + time + '}';
     }
-
+    
 }
