@@ -61,7 +61,8 @@ public class ManejoDatos {
         }
 
         escribirJugadores(jugadores);
-
+        // Guardar record
+        guardarRecord(jugador);
     }
 
     private static List<Jugador> leerJugadores() {
@@ -103,7 +104,7 @@ public class ManejoDatos {
     private static void escribirJugadores(List<Jugador> jugadores) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(TXT_PATH))) {
             for (Jugador jugador : jugadores) {
-                bw.write(jugador.getName() + "," + jugador.getModoJuego() + "," + jugador.getPoints() + "," + jugador.getMoves() + ","+jugador.getTime()+",");
+                bw.write(jugador.getName() + "," + jugador.getModoJuego() + "," + jugador.getPoints() + "," + jugador.getMoves() + "," + jugador.getTime() + ",");
 
                 Stack<Movimientos> movimientos = jugador.getMovimientos();
                 for (Movimientos movimiento : movimientos) {
@@ -111,6 +112,15 @@ public class ManejoDatos {
                 }
                 bw.newLine();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void guardarRecord(Jugador jugador) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(TXT_PATH_RECORDS, true))) {
+            bw.write(jugador.getName() + "," + jugador.getMoves() + "," + jugador.getTime() + "," + jugador.getPoints());
+            bw.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
