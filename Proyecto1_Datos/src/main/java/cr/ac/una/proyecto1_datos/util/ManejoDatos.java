@@ -5,8 +5,10 @@
 package cr.ac.una.proyecto1_datos.util;
 
 import cr.ac.una.proyecto1_datos.model.Jugador;
+import cr.ac.una.proyecto1_datos.model.Movimientos;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,121 +29,90 @@ public class ManejoDatos {
 
     private static final String TXT_PATH = "src/main/java/cr/ac/una/proyecto1_datos/model/datos.txt";
     private static final String TXT_PATH_RECORDS = "src/main/java/cr/ac/una/proyecto1_datos/model/records.txt";
-    private Stack<Object[]> dataStack;
-    private Stack<String> recordStack;
 
-    public ManejoDatos() {
-        dataStack = new Stack<>();
-        recordStack = new Stack<>();
+    public static Jugador buscarJugadorPorNombre(String nombre) {
+        List<Jugador> jugadores = leerJugadores();
+
+        for (Jugador jugador : jugadores) {
+            if (jugador.getName().equals(nombre)) {
+                return jugador;
+            }
+        }
+        return null; // Si el jugador no se encuentra
     }
 
-    public void pushData(Object... attributes) {
-        dataStack.push(attributes);
-    }
-
-    public void saveRecordTime(Jugador jugador) {//Guarda el tiempo que se le pase por parametro
-        recordStack.push(jugador.getName() + " " + jugador.getTime());  // Agrega el registro a la pila
-
-        Path filePath = Paths.get(TXT_PATH_RECORDS);
-
-        if (!Files.exists(filePath)) {
-            try {
-                Files.createDirectories(filePath.getParent());
-                Files.createFile(filePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
+    public static void guardarJugador(Jugador jugador) {
+        List<Jugador> jugadores = leerJugadores();
+        // Verificar si el jugador ya existe
+        boolean jugadorExiste = false;
+        for (Jugador j : jugadores) {
+            if (j.getName().equals(jugador.getName())) {
+                j.setModoJuego(jugador.getModoJuego());
+                j.setPoints(jugador.getPoints());
+                j.setMovimientos(jugador.getMovimientos());
+                j.setTime(jugador.getTime());
+                jugadorExiste = true;
+                break;
             }
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toFile(), true))) {
-            while (!recordStack.isEmpty()) {
-                String record = recordStack.pop();  // Obtén el registro de la pila
-                writer.write(record);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!jugadorExiste) {
+            jugadores.add(jugador);
         }
+
+        escribirJugadores(jugadores);
+
     }
 
-    public List<String> getTopThreeTimes(String targetTime) {//Devuelve un array list con los tres mejores tiempos que esten en el documentos de los records 
-        PriorityQueue<String> topTimes = new PriorityQueue<>((t1, t2) -> -t1.compareTo(t2));
-        Stack<String> resultStack = new Stack<>();
-
-        Path filePath = Paths.get(TXT_PATH_RECORDS);
-
-        if (!Files.exists(filePath)) {
-            System.out.println("El archivo de registros no existe.");
-            return resultStack;
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath.toFile()))) {
+    private static List<Jugador> leerJugadores() {
+        List<Jugador> jugadores = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(TXT_PATH))) {
             String line;
-            while ((line = reader.readLine()) != null) {
-                topTimes.offer(line);
-                if (topTimes.size() > 3) {
-                    topTimes.poll();
+            while ((line = br.readLine()) != null) {
+                String[] datos = line.split(",");
+                String name = datos[0];
+                String modoJuego = datos[1];
+                int points = Integer.parseInt(datos[2]);
+                int moves = Integer.parseInt(datos[3]);
+                String time = datos[4];
+                Stack<Movimientos> movimientos = new Stack<>();
+                String[] movimientosData = datos[5].split(";"); // Suponiendo que los movimientos están separados por ';'
+
+                for (String movimiento : movimientosData) {
+                    String[] movimientoData = movimiento.split("#");
+                    int numero = Integer.parseInt(movimientoData[0]);
+                    String direccion = movimientoData[1];
+
+                    Movimientos mov = new Movimientos(numero, direccion);
+                    movimientos.push(mov);
                 }
+
+                Jugador jugador = new Jugador(name, modoJuego, points, moves, time, movimientos);
+                jugadores.add(jugador);
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("El archivo no se encontró: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Error al convertir datos: " + e.getMessage());
         }
-
-        resultStack.addAll(topTimes);
-        return resultStack;
-
+        return jugadores;
     }
 
-    public void loadFromFile() {
-        Path filePath = Paths.get(TXT_PATH);
+    private static void escribirJugadores(List<Jugador> jugadores) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(TXT_PATH))) {
+            for (Jugador jugador : jugadores) {
+                bw.write(jugador.getName() + "," + jugador.getModoJuego() + "," + jugador.getPoints() + "," + jugador.getMoves() + ","+jugador.getTime()+",");
 
-        if (!Files.exists(filePath)) {
-            System.out.println("El archivo no existe.");
-            return;
-        }
-
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            for (String line : lines) {
-                String[] attributesStr = line.split(" ");
-                Object[] attributes = new Object[attributesStr.length];
-                for (int i = 0; i < attributesStr.length; i++) {
-                    attributes[i] = attributesStr[i];
+                Stack<Movimientos> movimientos = jugador.getMovimientos();
+                for (Movimientos movimiento : movimientos) {
+                    bw.write(movimiento.getNumero() + "#" + movimiento.getDireccion() + ";");
                 }
-                dataStack.push(attributes);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveToFile() {
-
-        Path filePath = Paths.get(TXT_PATH);
-
-        if (!Files.exists(filePath)) {
-            try {
-                Files.createDirectories(filePath.getParent());
-                Files.createFile(filePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toFile()))) {
-            while (!dataStack.isEmpty()) {
-                Object[] attributes = dataStack.pop();
-                for (Object attribute : attributes) {
-                    writer.write(attribute.toString());
-                    writer.write(" ");
-                }
-                writer.newLine();
+                bw.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

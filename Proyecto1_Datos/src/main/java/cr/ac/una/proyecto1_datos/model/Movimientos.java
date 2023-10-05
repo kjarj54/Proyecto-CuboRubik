@@ -11,11 +11,11 @@ package cr.ac.una.proyecto1_datos.model;
 public class Movimientos {
 
     private int numero;
-    private String descripcion;
+    private String direccion;
 
-    public Movimientos(int numero, String descripcion) {
+    public Movimientos(int numero, String direccion) {
         this.numero = numero;
-        this.descripcion = descripcion;
+        this.direccion = direccion;
     }
 
     public int getNumero() {
@@ -26,16 +26,16 @@ public class Movimientos {
         this.numero = numero;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     @Override
     public String toString() {
-        return "Movimiento{" + "numero=" + numero + ", descripcion=" + descripcion + '}';
+        return "Movimiento{" + "numero=" + numero + ", descripcion=" + direccion + '}';
     }
 }
