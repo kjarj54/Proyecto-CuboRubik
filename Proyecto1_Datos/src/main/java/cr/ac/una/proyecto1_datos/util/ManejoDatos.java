@@ -33,6 +33,31 @@ public class ManejoDatos {
         return null; // Si el jugador no se encuentra
     }
 
+    public static List<Jugador> leerRecords() {
+        List<Jugador> jugadores = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(TXT_PATH_RECORDS))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] datos = line.split(",");
+                String name = datos[0];
+                int moves = Integer.parseInt(datos[1]);
+                int time = Integer.parseInt(datos[2]);
+                int points = Integer.parseInt(datos[3]);
+
+                Jugador jugador = new Jugador(name, null, points, moves, time, null);
+                jugadores.add(jugador);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("El archivo no se encontró: " + e.getMessage());
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return jugadores;
+    }
+
     public static void guardarJugador(Jugador jugador) {
         List<Jugador> jugadores = leerJugadores();
         // Verificar si el jugador ya existe
@@ -136,7 +161,7 @@ public class ManejoDatos {
             bw.write(jugador.getName() + "," + jugador.getMoves() + "," + jugador.getTime() + "," + jugador.getPoints());
             bw.newLine(); // Se agrega una nueva línea para separar los registros.
         } catch (IOException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
     }
 }
