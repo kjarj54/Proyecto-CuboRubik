@@ -78,8 +78,6 @@ public class ManejoDatos {
         }
 
         escribirJugadores(jugadores);
-        // Guardar record
-        guardarRecord(jugador);
     }
 
     // Este método lee información de jugadores desde un archivo de texto y la procesa para crear una lista de objetos Jugador.
