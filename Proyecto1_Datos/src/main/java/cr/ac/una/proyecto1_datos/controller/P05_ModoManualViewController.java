@@ -303,7 +303,12 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     // Repinta las caras de cada posicion, metodo perteneciente a cambiarColores()
     public void repintarCaras(MeshView mesh, String color) {
         PhongMaterial material = new PhongMaterial();
-        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + "0.png");
+        Image textureImage;
+        if (color.equals("A01")) {
+            textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + ".png");
+        } else {
+            textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + "0.png");
+        }
         material.setDiffuseMap(textureImage);
         mesh.setMaterial(material);
     }

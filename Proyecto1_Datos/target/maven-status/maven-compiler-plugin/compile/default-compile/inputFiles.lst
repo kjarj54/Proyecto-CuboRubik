@@ -1,21 +1,21 @@
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Cubito.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\AppContext.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\Controller.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\SoundUtil.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\FlowController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P07_AcercaDeViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P03_NuevaPartidaViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\App.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P04_ContinuarPartidaViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P02_MenuViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P01_PrincipalViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Movimientos.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\Cronometro.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P05_ModoManualViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\Respuesta.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\Mensaje.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P06_MesaJuegoViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Jugador.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\ManejoDatos.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController.java
-C:\Users\Luvara\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Cubo3D.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P02_MenuViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P01_PrincipalViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P05_ModoManualViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\FlowController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Movimientos.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\ManejoDatos.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P04_ContinuarPartidaViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\Controller.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P07_AcercaDeViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\SoundUtil.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Jugador.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Cubito.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\Mensaje.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P03_NuevaPartidaViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\Respuesta.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\App.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\controller\P06_MesaJuegoViewController.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\AppContext.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\util\Cronometro.java
+C:\Users\BiblioPZ UNA\Documents\GitHub\Proyecto-CuboRubik\Proyecto1_Datos\src\main\java\cr\ac\una\proyecto1_datos\model\Cubo3D.java
