@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.proyecto1_datos.util;
 
 import cr.ac.una.proyecto1_datos.model.Jugador;
@@ -78,7 +74,7 @@ public class ManejoDatos {
                 String modoJuego = datos[1]; // Se obtiene el modo de juego.
                 int points = Integer.parseInt(datos[2]); // Se convierte la puntuación a entero.
                 int moves = Integer.parseInt(datos[3]); // Se convierte el número de movimientos a entero.
-                String time = datos[4]; // Se obtiene el tiempo de juego.
+                int time = Integer.parseInt(datos[4]); // Se obtiene el tiempo de juego.
 
                 // Se crea una pila para almacenar los movimientos del jugador.
                 Stack<Movimientos> movimientos = new Stack<>();

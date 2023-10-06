@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -33,8 +34,11 @@ public class P02_MenuViewController extends Controller implements Initializable 
     private MediaView mdvMenu;
     @FXML
     private AnchorPane root;
+    @FXML
+    private TableView<?> tbvMejoresTiempos;
 
     MediaPlayer mediaPlayer;
+    
 
     /**
      * Initializes the controller class.
@@ -56,25 +60,31 @@ public class P02_MenuViewController extends Controller implements Initializable 
         SoundUtil.mouseEnterSound();
         mediaPlayer.setCycleCount(0);
         mediaPlayer.stop();
-        FlowController.getInstance().goView("P03_RegistroJugadorView");
+        FlowController.getInstance().goView("P03_NuevaPartidaView");
     }
 
     @FXML
     private void onActionBtnContinuarPartida(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         mediaPlayer.setCycleCount(0);
         mediaPlayer.stop();
-        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P04_ContinuarPartidaView");
     }
 
     @FXML
     private void onActionBtnAcercaDe(ActionEvent event) {
         SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goViewInWindowModal("P07_AcercaDeView", stage, Boolean.FALSE);
     }
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         FlowController.getInstance().salir();
+    }
+    
+    private void cargarMejoresTiempos(){
+        
     }
 
     private void loadVideo() {

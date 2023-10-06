@@ -1,3 +1,4 @@
+cr\ac\una\proyecto1_datos\controller\P06_MesaJuegoViewController.class
 cr\ac\una\proyecto1_datos\model\Cubito.class
 cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController.class
 cr\ac\una\proyecto1_datos\App.class
@@ -9,11 +10,14 @@ cr\ac\una\proyecto1_datos\util\FlowController.class
 cr\ac\una\proyecto1_datos\controller\Controller.class
 cr\ac\una\proyecto1_datos\controller\P04_ContinuarPartidaViewController.class
 cr\ac\una\proyecto1_datos\model\Jugador.class
+cr\ac\una\proyecto1_datos\controller\P06_MesaJuegoViewController$SmartGroup.class
 cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController$1.class
 cr\ac\una\proyecto1_datos\model\Cubito$PositionCube.class
 cr\ac\una\proyecto1_datos\util\Mensaje.class
 cr\ac\una\proyecto1_datos\model\Cubo3D.class
+cr\ac\una\proyecto1_datos\model\Movimientos.class
 cr\ac\una\proyecto1_datos\controller\P01_PrincipalViewController$1.class
+cr\ac\una\proyecto1_datos\controller\P07_AcercaDeViewController.class
 cr\ac\una\proyecto1_datos\util\Respuesta.class
 cr\ac\una\proyecto1_datos\util\AppContext.class
 cr\ac\una\proyecto1_datos\controller\P01_PrincipalViewController.class

@@ -78,10 +78,15 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
             new Mensaje().showModal(Alert.AlertType.ERROR, "Ingresar Jugador", getStage(), "Es necesario digitar un nombre para continuar");
         } else {
             SoundUtil.mouseEnterSound();
-            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0,0, "0", new Stack<>());
+            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0,0, 0, new Stack<>());
             AppContext.getInstance().set("Jugador", jugador);
             FlowController.getInstance().delete("P02_RegistroJugadoresView");
-            FlowController.getInstance().goView("A01_PruebasView");
+            if (tggModoJuego.getSelectedToggle().getUserData().equals("Automatico")){
+                FlowController.getInstance().goView("P06_MesaJuegoView");
+            } else{
+                FlowController.getInstance().goView("P05_ModoManualView");
+            }
+            
         }
     }
 

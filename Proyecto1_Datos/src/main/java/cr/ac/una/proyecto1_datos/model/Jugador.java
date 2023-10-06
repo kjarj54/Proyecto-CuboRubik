@@ -13,9 +13,9 @@ public class Jugador {
     private int points;
     private int moves;
     private Stack<Movimientos> movimientos;
-    private String time;//Se le tiene que mandar en segundo nada mas para evitar errores
+    private int time;//Se le tiene que mandar en segundo nada mas para evitar errores
 
-    public Jugador(String name, String modoJuego, int points,int moves , String time,Stack<Movimientos> movimientos) {
+    public Jugador(String name, String modoJuego, int points, int moves, int time, Stack<Movimientos> movimientos) {
         this.name = name;
         this.modoJuego = modoJuego;
         this.points = points;
@@ -56,13 +56,11 @@ public class Jugador {
         this.movimientos = movimientos;
     }
 
-    
-
-    public String getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(int time) {
         this.time = time;
     }
 
@@ -78,5 +76,5 @@ public class Jugador {
     public String toString() {
         return "Jugador{" + "name=" + name + ", modoJuego=" + modoJuego + ", points=" + points + ", moves=" + moves + ", movimientos=" + movimientos + ", time=" + time + '}';
     }
-    
+
 }

@@ -12,7 +12,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import static javafx.scene.input.KeyCode.ENTER;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -32,6 +34,8 @@ public class P01_PrincipalViewController extends Controller implements Initializ
     private MFXButton btnIngresar;
 
     MediaPlayer mediaPlayer;
+    @FXML
+    private BorderPane root;
 
     /**
      * Initializes the controller class.
@@ -53,6 +57,7 @@ public class P01_PrincipalViewController extends Controller implements Initializ
         mediaPlayer.setCycleCount(0);
         mediaPlayer.stop();
         SoundUtil.pressButtonSound();
+        acPanePrincipal.getChildren().clear();
         FlowController.getInstance().goView("P02_MenuView");
     }
 
@@ -85,10 +90,12 @@ public class P01_PrincipalViewController extends Controller implements Initializ
                 // Captura eventos del teclado para continuar
                 Scene scene = FlowController.getInstance().getMainScene();
                 scene.setOnKeyPressed(event -> {
-                    mediaPlayer.setCycleCount(0);
-                    mediaPlayer.stop();
-                    SoundUtil.pressButtonSound();
-                    FlowController.getInstance().goView("P02_MenuView");
+                    if (event.getCode().equals(ENTER)) {
+                        mediaPlayer.setCycleCount(0);
+                        mediaPlayer.stop();
+                        SoundUtil.pressButtonSound();
+                        FlowController.getInstance().goView("P02_MenuView");
+                    }
                 });
             }
         };

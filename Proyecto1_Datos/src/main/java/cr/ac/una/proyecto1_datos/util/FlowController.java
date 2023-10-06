@@ -81,12 +81,12 @@ public class FlowController {
 
     public void goMain() {
         try {
+            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_MenuView.fxml"), this.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/A01_PruebasView.fxml"), this.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_RegistroJugadorView.fxml"), this.idioma)));
-//FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/loginPruebaView.fxml"), this.idioma)));
-            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P05_ModoManualView.fxml"), this.idioma)));
+//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P05_ModoManualView.fxml"), this.idioma)));
+//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P06_MesaJuegoView.fxml"), this.idioma)));
+
 
 
             FlowController.mainStage.show();
@@ -114,21 +114,21 @@ public class FlowController {
             controller.setStage(stage);
         }
         switch (location) {
-            case "Center":
+            case "Center" -> {
                 AnchorPane anchorP = ((AnchorPane) ((BorderPane) stage.getScene().getRoot()).getCenter());
                 anchorP.getChildren().clear();
                 anchorP.getChildren().add(loader.getRoot());
-                break;
-            case "Top":
-                break;
-            case "Bottom":
-                break;
-            case "Right":
-                break;
-            case "Left":
-                break;
-            default:
-                break;
+            }
+            case "Top" -> {
+            }
+            case "Bottom" -> {
+            }
+            case "Right" -> {
+            }
+            case "Left" -> {
+            }
+            default -> {
+            }
         }
     }
 

@@ -2,6 +2,11 @@
  * Empty Stylesheet file.
  */
 
+@font-face {
+    font-family: "OCR A Extended"; /* Nombre de la fuente que deseas utilizar */
+    src: url("../resources/fonts/OCRAEXT.TTF"); /* Ruta de la fuente descargada */
+}
+
 .mainFxmlClass {
 
 }
@@ -16,7 +21,7 @@
 .mfx-button-inicio{
     -fx-cursor: hand;
     -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
-    -fx-font: 40px "Californian FB";
+    -fx-font: 40px "OCR A Extended";
     -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
     -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
     -fx-background-position: center; /* Centra la imagen en el botón */
@@ -34,7 +39,7 @@
     -fx-pref-width: 300px;   /* Ancho mínimo */
     -fx-pref-height: 50px;   /* Alto mínimo */
     -fx-background-color: #333333; /* Establece el fondo del botón como transparente */
-    -fx-font: 20px "OCR a extended"; /* Establece la fuente y el tamano */
+    -fx-font: 20px "OCR A Extended"; /* Establece la fuente y el tamano */
     -fx-text-fill: #FFFFFF; /* Color del texto */
     -fx-background-radius: 0px;
     -fx-padding: 0;  /*Elimina el relleno del botón */
@@ -110,7 +115,7 @@
 }
 /*------------------------------------------------------------------------------*/
 .mfx-radio-button{
-    -fx-font: 20px "OCR a extended";
+    -fx-font: 20px "OCR A Extended";
     -fx-text-fill: #000000;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
     -mfx-main: #000000;
@@ -118,7 +123,7 @@
 }
 
 .mfx-radio-button-image{
-    -fx-font: 20px "OCR a extended"; /* Establece la fuente y el tamano */
+    -fx-font: 20px "OCR A Extended"; /* Establece la fuente y el tamano */
     -fx-text-fill: #000000; /* Color del texto */
     -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
     -fx-content-display: graphic-only;
@@ -140,11 +145,11 @@
     -fx-border-color: #000000;
     -fx-border-radius: 5;
     -fx-padding: 5;
-    -fx-font: 20px "OCR a extended";
+    -fx-font: 20px "OCR A Extended";
 }
 
 .mfx-text-field-edit .floating-text {
-    -fx-font: 20px "OCR a extended";
+    -fx-font: 20px "OCR A Extended";
     -fx-text-fill: -mfx-text-he;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
 }
@@ -168,15 +173,19 @@
 /*------------------------------------------------------------------------------*/
 .label{
 
-    -fx-font: 18px "OCR a extended"; /* Establece la fuente y el tamano */
+    -fx-font: 18px "OCR A Extended"; /* Establece la fuente y el tamano */
     -fx-text-fill: #000000; /* Color del texto */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.label-other{
 
-
+    -fx-font: 20px "OCR A Extended"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #000000; /* Color del texto */
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
 }
 /*------------------------------------------------------------------------------*/
 .tooltip {
-    -fx-font: 20px "OCR a extended"; /* Establece la fuente y el tamano */
+    -fx-font: 20px "OCR A Extended"; /* Establece la fuente y el tamano */
     -fx-text-fill: #000000; /* Color del texto */
     -fx-background-color: rgba(204, 204, 204, 0.50); /* Cambia el color de fondo */
     -fx-background-radius: 10px;
@@ -184,4 +193,8 @@
     -fx-border-width: 2px; /* Cambia el ancho del borde */
     -fx-border-radius: 10px;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+/*------------------------------------------------------------------------------*/
+.images-effect {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 204, 1), 10, 0.5, 0.0, 0.0);
 }

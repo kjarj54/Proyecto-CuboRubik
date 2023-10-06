@@ -11,22 +11,27 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: gray;" styleClass="mainFxmlClass" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.proyecto1_datos.controller.P05_ModoManualViewController">
      <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" styleClass="imvFondoPantallaJuego" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox minWidth="-Infinity" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <Label fx:id="lblNombre" prefHeight="50.0" text="Nombre: " />
-                  <Label fx:id="lblTiempo" layoutX="30.0" layoutY="30.0" prefHeight="50.0" text="Tiempo: 00: 00." />
-                  <Label fx:id="lblMovimientos" layoutX="30.0" layoutY="80.0" prefHeight="50.0" text="Movimientos: 00" />
-                  <Label fx:id="lblPuntos" layoutX="25.0" layoutY="145.0" prefHeight="50.0" text="Puntos: 0000" />
-                  <MFXButton fx:id="btnIniciarPartida" onAction="#onActionBtnIniciarPartida" styleClass="mfx-button-menuPrincipal" text="Iniciar Partida" />
-               </children>
                <padding>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
+               <children>
+                  <MFXButton fx:id="btnSalir" onAction="#onActionBtnSalir" styleClass="mfx-button-Image">
+                     <graphic>
+                        <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/media/icons/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MFXButton>
+               </children>
             </VBox>
             <VBox alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="80.0" spacing="10.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
@@ -38,69 +43,128 @@
                   </SubScene>
                   <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <MFXButton fx:id="btnBlue" styleClass="mfx-button-Image-variable">
-                           <graphic>
-                              <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/colors/Blue.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MFXButton>
-                        <MFXButton fx:id="btnGreen" styleClass="mfx-button-Image-variable">
-                           <graphic>
-                              <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/colors/Green.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MFXButton>
-                        <MFXButton fx:id="btnOrange" styleClass="mfx-button-Image-variable">
-                           <graphic>
-                              <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/colors/Orange.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MFXButton>
-                        <MFXButton fx:id="btnRed" styleClass="mfx-button-Image-variable">
-                           <graphic>
-                              <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/colors/Red.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MFXButton>
-                        <MFXButton fx:id="btnWhite" styleClass="mfx-button-Image-variable">
-                           <graphic>
-                              <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/colors/White.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MFXButton>
-                        <MFXButton fx:id="btnYellow" styleClass="mfx-button-Image-variable">
-                           <graphic>
-                              <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/colors/Yellow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MFXButton>
+                        <VBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <MFXButton fx:id="btnBlue" styleClass="mfx-button-Image-variable">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Blue.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <Label fx:id="lblBlue" alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="label-other" text="8" textAlignment="CENTER" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <MFXButton fx:id="btnGreen" styleClass="mfx-button-Image-variable">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Green.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <Label fx:id="lblGreen" styleClass="label-other" text="8" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="90.0" layoutY="10.0" spacing="5.0">
+                           <children>
+                              <MFXButton fx:id="btnOrange" styleClass="mfx-button-Image-variable">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Orange.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <Label fx:id="lblOrange" styleClass="label-other" text="8" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="90.0" layoutY="10.0" spacing="5.0">
+                           <children>
+                              <MFXButton fx:id="btnRed" styleClass="mfx-button-Image-variable">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Red.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <Label fx:id="lblRed" styleClass="label-other" text="8" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="90.0" layoutY="10.0" spacing="5.0">
+                           <children>
+                              <MFXButton fx:id="btnWhite" styleClass="mfx-button-Image-variable">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/White.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <Label fx:id="lblWhite" styleClass="label-other" text="8" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="90.0" layoutY="10.0" spacing="5.0">
+                           <children>
+                              <MFXButton fx:id="btnYellow" styleClass="mfx-button-Image-variable">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Yellow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <Label fx:id="lblYellow" styleClass="label-other" text="8" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="80.0" spacing="10.0" HBox.hgrow="ALWAYS" />
-            <VBox layoutX="10.0" layoutY="10.0" minWidth="-Infinity" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="-Infinity" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
                   <MFXButton fx:id="btnPruebas" />
+                  <Pane layoutX="25.0" layoutY="280.0" maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass="images-effect">
+                           <image>
+                              <Image url="@../resources/media/icons/leftClick.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="label-other" text="Seleccionar cuadro." textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="OCR A Extended" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="25.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="200.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true" styleClass="images-effect">
+                           <image>
+                              <Image url="@../resources/media/icons/leftClick.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="label-other" text="Girar el cubo." textAlignment="CENTER" wrapText="true" />
+                     </children>
+                     <padding>
+                        <Insets left="17.0" />
+                     </padding>
+                  </HBox>
                   <Pane maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <MFXButton fx:id="btnIniciarPartida" onAction="#onActionBtnIniciarPartida" styleClass="mfx-button-menuPrincipal" text="Iniciar Partida" />
                </children>
                <padding>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
