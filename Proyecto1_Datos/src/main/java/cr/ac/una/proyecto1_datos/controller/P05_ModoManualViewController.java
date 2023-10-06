@@ -162,9 +162,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     private void onActionBtnIniciarPartida(ActionEvent event) {
         if (iniciarPartida == 0) {
             AppContext.getInstance().set("coloresManual", colorsList);
-//            P06_MesaJuegoViewController a = (P06_MesaJuegoViewController) FlowController.getInstance().getController("P06_MesaJuegoViewController");
-//            a.initialize();
-
             FlowController.getInstance().goView("P06_MesaJuegoView");
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cubo incompleto", getStage(), "Es necesario llenar todo el cubo.");
@@ -306,7 +303,7 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     // Repinta las caras de cada posicion, metodo perteneciente a cambiarColores()
     public void repintarCaras(MeshView mesh, String color) {
         PhongMaterial material = new PhongMaterial();
-        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + ".png");
+        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + "0.png");
         material.setDiffuseMap(textureImage);
         mesh.setMaterial(material);
     }
@@ -399,7 +396,7 @@ public class P05_ModoManualViewController extends Controller implements Initiali
 
             PhongMaterial material = new PhongMaterial();
             String color = (String) ((MFXButton) event.getSource()).getUserData();
-            Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + ".png");
+            Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + "0.png");
             material.setDiffuseMap(textureImage);
             meshView.setMaterial(material);
 

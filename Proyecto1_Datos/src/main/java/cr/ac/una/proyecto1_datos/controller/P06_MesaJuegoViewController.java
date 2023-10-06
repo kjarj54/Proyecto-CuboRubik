@@ -89,9 +89,11 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     @FXML
     private MFXButton btnGuardarSalir;
     @FXML
-    private MFXButton btnPruebas;
-    @FXML
     private MFXButton btnSolucionar;
+    @FXML
+    private MFXButton btnSkin1;
+    @FXML
+    private MFXButton btnSkin2;
 
     // Variables Globales-------------------------------------------------------
     // Variables para los giros del cubo con el mouse
@@ -143,6 +145,7 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     Cronometro cronometro;
     Random rand = new Random();
     Stack<Movimientos> stackMoves = new Stack<>();
+    String cambio = "0";
     // FIN Variables Globales-------------------------------------------------------
 
     /**
@@ -367,7 +370,7 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     // Repinta las caras de cada posicion, metodo perteneciente a cambiarColores()
     public void repintarCaras(MeshView mesh, String color) {
         PhongMaterial material = new PhongMaterial();
-        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + ".png");
+        Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/" + color + cambio + ".png");
         material.setDiffuseMap(textureImage);
         mesh.setMaterial(material);
     }
@@ -1235,6 +1238,18 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
             newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
             group.translateZProperty().set(newZoom);
         });
+    }
+
+    @FXML
+    private void onActionBtnSkin1(ActionEvent event) {
+        cambio = "0";
+        rellenarCubo();
+    }
+
+    @FXML
+    private void onActionBtnSkin2(ActionEvent event) {
+        cambio = "1";
+        rellenarCubo();
     }
 
     // Clase que extiende a group para aplicar los giros y rotaciones
