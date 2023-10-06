@@ -1,0 +1,4 @@
+Jugador3,40,130,150
+Jugador4,55,140,180
+Jugador5,45,110,120
+Jugador6,70,160,220

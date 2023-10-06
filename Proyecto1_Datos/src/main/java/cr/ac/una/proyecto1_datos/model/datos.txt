@@ -1,0 +1,6 @@
+Jugador1,Modo1,100,50,120,
+Jugador2,Modo2,200,60,150,
+Jugador3,Modo1,150,40,130,
+Jugador4,Modo2,180,55,140,
+Jugador5,Modo1,120,45,110,
+Jugador6,Modo2,220,70,160,

@@ -46,7 +46,7 @@ public class ManejoDatos {
                 int time = Integer.parseInt(datos[2]);
                 int points = Integer.parseInt(datos[3]);
 
-                Jugador jugador = new Jugador(name, null, points, moves, time, null);
+                Jugador jugador = new Jugador(name, null, points, moves, time, new Stack<>());
                 jugadores.add(jugador);
             }
         } catch (FileNotFoundException e) {
@@ -101,19 +101,20 @@ public class ManejoDatos {
 
                 // Se crea una pila para almacenar los movimientos del jugador.
                 Stack<Movimientos> movimientos = new Stack<>();
-                String[] movimientosData = datos[5].split(";"); // Se supone que los movimientos están separados por ';'.
+                if (datos.length == 6) {
+                    String[] movimientosData = datos[5].split(";"); // Se supone que los movimientos están separados por ';'.
 
-                // Se procesa cada movimiento.
-                for (String movimiento : movimientosData) {
-                    String[] movimientoData = movimiento.split("#"); // Se separa el número del movimiento y la dirección.
-                    int numero = Integer.parseInt(movimientoData[0]); // Se convierte el número del movimiento a entero.
-                    String direccion = movimientoData[1]; // Se obtiene la dirección.
+                    // Se procesa cada movimiento.
+                    for (String movimiento : movimientosData) {
+                        String[] movimientoData = movimiento.split("#"); // Se separa el número del movimiento y la dirección.
+                        int numero = Integer.parseInt(movimientoData[0]); // Se convierte el número del movimiento a entero.
+                        String direccion = movimientoData[1]; // Se obtiene la dirección.
 
-                    // Se crea un objeto Movimientos y se agrega a la pila de movimientos.
-                    Movimientos mov = new Movimientos(numero, direccion);
-                    movimientos.push(mov);
+                        // Se crea un objeto Movimientos y se agrega a la pila de movimientos.
+                        Movimientos mov = new Movimientos(numero, direccion);
+                        movimientos.push(mov);
+                    }
                 }
-
                 // Se crea un objeto Jugador con los datos procesados y se agrega a la lista de jugadores.
                 Jugador jugador = new Jugador(name, modoJuego, points, moves, time, movimientos);
                 jugadores.add(jugador);

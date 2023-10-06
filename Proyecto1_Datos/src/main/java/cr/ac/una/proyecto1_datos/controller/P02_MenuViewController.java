@@ -1,15 +1,23 @@
 package cr.ac.una.proyecto1_datos.controller;
 
+import cr.ac.una.proyecto1_datos.model.Jugador;
 import cr.ac.una.proyecto1_datos.util.FlowController;
+import static cr.ac.una.proyecto1_datos.util.ManejoDatos.leerRecords;
 import cr.ac.una.proyecto1_datos.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.io.File;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -35,10 +43,9 @@ public class P02_MenuViewController extends Controller implements Initializable 
     @FXML
     private AnchorPane root;
     @FXML
-    private TableView<?> tbvMejoresTiempos;
+    private TableView<Jugador> tbvMejoresTiempos;
 
     MediaPlayer mediaPlayer;
-    
 
     /**
      * Initializes the controller class.
@@ -48,6 +55,27 @@ public class P02_MenuViewController extends Controller implements Initializable 
         // TODO
         loadVideo();
         onMouseEntered();
+        ObservableList<Jugador> jugadores = FXCollections.observableArrayList(leerRecords().stream()
+                .sorted(Comparator.comparing(Jugador::getTime)) // Ordena por el campo "time"
+                .collect(Collectors.toList()));
+        // Asocia la lista de jugadores a la TableView
+        tbvMejoresTiempos.setItems(jugadores);
+
+        // Crea las columnas y asocia sus propiedades
+        TableColumn<Jugador, String> nameColumn = new TableColumn<>("Nombre");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Jugador, Integer> timeColumn = new TableColumn<>("Tiempo");
+        timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        TableColumn<Jugador, Integer> movesColumn = new TableColumn<>("Movimientos");
+        movesColumn.setCellValueFactory(new PropertyValueFactory<>("moves"));
+
+        TableColumn<Jugador, Integer> pointsColumn = new TableColumn<>("Puntos");
+        pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
+
+        // Agrega las columnas a la TableView
+        tbvMejoresTiempos.getColumns().addAll(nameColumn, timeColumn, movesColumn, pointsColumn);
     }
 
     @Override
@@ -82,9 +110,9 @@ public class P02_MenuViewController extends Controller implements Initializable 
         SoundUtil.mouseEnterSound();
         FlowController.getInstance().salir();
     }
-    
-    private void cargarMejoresTiempos(){
-        
+
+    private void cargarMejoresTiempos() {
+
     }
 
     private void loadVideo() {
