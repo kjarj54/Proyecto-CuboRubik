@@ -5,6 +5,7 @@ import cr.ac.una.proyecto1_datos.model.Cubo3D;
 import cr.ac.una.proyecto1_datos.util.AppContext;
 import cr.ac.una.proyecto1_datos.util.FlowController;
 import cr.ac.una.proyecto1_datos.util.Mensaje;
+import cr.ac.una.proyecto1_datos.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,8 +63,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     @FXML
     private MFXButton btnIniciarPartida;
     @FXML
-    private MFXButton btnPruebas;
-    @FXML
     private MFXButton btnBlue;
     @FXML
     private MFXButton btnGreen;
@@ -77,6 +76,10 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     private MFXButton btnYellow;
     @FXML
     private MFXButton btnSalir;
+    @FXML
+    private MFXButton btnReiniciarLados;
+    @FXML
+    private MFXButton btnReiniciarEsquinas;
 
     // Variables para los giros del cubo con el mouse
     private double anchorX, anchorY;
@@ -108,8 +111,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     Cubito cubito;
     Cubo3D cubo3D = new Cubo3D();
 
-    List<MFXButton> buttonList = new ArrayList<>();
-
     List<List<String>> colorsList = new ArrayList<>();
 
     /**
@@ -125,33 +126,8 @@ public class P05_ModoManualViewController extends Controller implements Initiali
         btnWhite.setUserData("White");
         btnYellow.setUserData("Yellow");
         manejoBotones(Boolean.TRUE);
-        buttonList.addAll(Arrays.asList(btnBlue, btnGreen, btnOrange, btnRed, btnWhite, btnYellow));
         iniciarScena();
         manejoAccionBotones();
-
-//        for (int i = 0; i < loadCubesFaces3D.size(); i++) {
-//            switch (i) {
-//                // centros
-//                case 4, 10, 12, 14, 16, 22 -> {
-//                    centrosGroup.add(loadCubesFaces3D.get(i));
-//                }
-//                // lados
-//                case 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25 -> {
-//                    ladosGroup.add(loadCubesFaces3D.get(i));
-//                }
-//                // ezquinas
-//                case 0, 2, 6, 8, 18, 20, 24, 26 -> {
-//                    cornersGroup.add(loadCubesFaces3D.get(i));
-//                }
-//                default -> {
-//                }
-//            }
-//        }
-//        System.out.println("Grupo centro size: " + centrosGroup.size());
-//        System.out.println("Grupo lados size: " + ladosGroup.size());
-//        System.out.println("Grupo cornes size: " + cornersGroup.size());
-//
-//        System.out.println("Lista colores size: " + colorsList.size());
     }
 
     @Override
@@ -160,6 +136,7 @@ public class P05_ModoManualViewController extends Controller implements Initiali
 
     @FXML
     private void onActionBtnIniciarPartida(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         if (iniciarPartida == 0) {
             AppContext.getInstance().set("coloresManual", colorsList);
             FlowController.getInstance().goView("P06_MesaJuegoView");
@@ -170,8 +147,47 @@ public class P05_ModoManualViewController extends Controller implements Initiali
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().delete("P05_ModoManualView");
         FlowController.getInstance().goView("P03_NuevaPartidaView");
+    }
+
+    @FXML
+    private void onActionBtnReiniciarLados(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        for (int i = 0; i < sides.length; i++) {
+            List<String> color = colorsList.get(sides[i]);
+            for (int j = 0; j < color.size(); j++) {
+                color.set(j, "A01");
+            }
+        }
+        blueSides = 4;
+        greenSides = 4;
+        orangeSides = 4;
+        redSides = 4;
+        whiteSides = 4;
+        yellowSides = 4;
+        rellenarCubo();
+        manejoContadoresTotal();
+    }
+
+    @FXML
+    private void onActionBtnReiniciarEsquinas(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        for (int i = 0; i < corners.length; i++) {
+            List<String> color = colorsList.get(corners[i]);
+            for (int j = 0; j < color.size(); j++) {
+                color.set(j, "A01");
+            }
+        }
+        blueCorner = 4;
+        greenCorner = 4;
+        orangeCorner = 4;
+        redCorner = 4;
+        whiteCorner = 4;
+        yellowCorner = 4;
+        rellenarCubo();
+        manejoContadoresTotal();
     }
 
     private void iniciarScena() {
@@ -224,13 +240,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
                 }
             }
         }
-//        for (int i = 0; i < colorsList.size(); i++) {
-//            List<String> aux = colorsList.get(i);
-//            for (int j = 0; j < aux.size(); j++) {
-//                System.out.print(aux.get(j) + " ");
-//            }
-//            System.out.println("");
-//        }
 
         loadCubesFaces3D = new ArrayList<>(cubo3D.getListGroup());
 
@@ -252,29 +261,11 @@ public class P05_ModoManualViewController extends Controller implements Initiali
         punterosMouse(principalGroup);
         initMouseControl(principalGroup, subScene);
         rellenarCubo();
-//      manejadores(groupCen);
     }
 
     // Metodo que vuelve a dibujar el cubo3D en pantalla con las posiciones actualizadas
     private void rellenarCubo() {
 
-//        int contador = 0;
-//
-//        for (int i = 0; i < loadCubesFaces3D.size(); i++) {
-//            Group group = loadCubesFaces3D.get(i);
-//            for (int j = 0; j < group.getChildren().size(); j++) {
-//                MeshView meshView = (MeshView) group.getChildren().get(j);
-//                 PhongMaterial material = new PhongMaterial();
-//                if (group.getChildren().size()==1){
-//                    Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/A01.png");
-//                }
-//                
-//               
-//                Image textureImage = new Image("cr/ac/una/proyecto1_datos/resources/media/colors/A01.png");
-//                material.setDiffuseMap(textureImage);
-//                meshView.setMaterial(material);
-//            }
-//        }
         int contador = 0;
 
         for (int i = 0; i < row; i++) {
@@ -289,7 +280,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
                 }
             }
         }
-
     }
 
     // Repinta las caras de cada posicion, metodo perteneciente a rellenarCubo()
@@ -337,7 +327,7 @@ public class P05_ModoManualViewController extends Controller implements Initiali
                 Node pickedNode = pickResult.getIntersectedNode();
 
                 if (pickedNode != null) {
-                    System.out.println("Nodo seleccionado: " + pickedNode);
+//                    System.out.println("Nodo seleccionado: " + pickedNode);
 
                     meshView = (MeshView) pickedNode;
                     Group group1 = (Group) meshView.getParent();
@@ -346,9 +336,9 @@ public class P05_ModoManualViewController extends Controller implements Initiali
                     groupId = Integer.parseInt(group1.getId());
                     groupChildren = group1.getChildren().size();
 
-                    System.out.println("meshview id: " + meshView.getId());
-                    System.out.println("group id: " + group1.getId());
-                    System.out.println("Tamano del group" + group1.getChildren().size());
+//                    System.out.println("meshview id: " + meshView.getId());
+//                    System.out.println("group id: " + group1.getId());
+//                    System.out.println("Tamano del group" + group1.getChildren().size());
 
                     if (groupChildren == 1) {
                         manejoBotones(true);
@@ -367,19 +357,19 @@ public class P05_ModoManualViewController extends Controller implements Initiali
             }
         });
         group.setOnMouseEntered(event -> {
-            if (!event.isPrimaryButtonDown()) {
+            if (!event.isSecondaryButtonDown()) {
                 group.setCursor(Cursor.OPEN_HAND);
             }
         });
 
         group.setOnMouseExited(event -> {
-            if (!event.isPrimaryButtonDown()) {
+            if (!event.isSecondaryButtonDown()) {
                 group.setCursor(Cursor.DEFAULT);
             }
         });
 
         group.setOnMousePressed(event -> {
-            if (event.isPrimaryButtonDown()) {
+            if (event.isSecondaryButtonDown()) {
                 group.setCursor(Cursor.CLOSED_HAND);
             }
         });
@@ -389,15 +379,28 @@ public class P05_ModoManualViewController extends Controller implements Initiali
             anchorAngleY = angleY.get();
             group.setCursor(Cursor.OPEN_HAND);
         });
+        btnIniciarPartida.setOnMouseEntered(event->{
+        SoundUtil.mouseHoverSound();
+        });
+        btnReiniciarEsquinas.setOnMouseEntered(event->{
+        SoundUtil.mouseHoverSound();
+        });
+        btnReiniciarLados.setOnMouseEntered(event->{
+        SoundUtil.mouseHoverSound();
+        });
+        btnSalir.setOnMouseEntered(event->{
+        SoundUtil.mouseHoverSound();
+        });
     }
 
     // Metodo que hace una misma accion para todos los botones de color
     private void manejoAccionBotones() {
+
         // Crear un manejador de eventos común
         EventHandler<ActionEvent> commonHandler = (ActionEvent event) -> {
+
             // El código que se ejecutará cuando se haga clic en cualquiera de los botones
             List<String> aux = colorsList.get(groupId);
-//          aux.set(meshId, "vacio");
 
             PhongMaterial material = new PhongMaterial();
             String color = (String) ((MFXButton) event.getSource()).getUserData();
@@ -415,19 +418,8 @@ public class P05_ModoManualViewController extends Controller implements Initiali
                 manejoContadoresEsquinas(color);
             }
 
-            manejoContadoresTotal(color);
-
+            manejoContadoresTotal();
             manejoBotones(Boolean.TRUE);
-
-//            PhongMaterial phongMaterial = (PhongMaterial) meshView.getMaterial();
-//            System.out.println(phongMaterial.getDiffuseMap().getUrl());
-//
-//            MeshView meshView1 = (MeshView) loadCubesFaces3D.get(4).getChildren().get(0);
-//
-//            PhongMaterial phongMaterial1 = (PhongMaterial) meshView1.getMaterial();
-//            System.out.println(phongMaterial1.getDiffuseMap().getUrl());
-//
-//            System.out.println("Botón presionado: " + ((MFXButton) event.getSource()).getUserData());
         };
 
         //asignarles el mismo manejador de eventos
@@ -442,9 +434,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     private void esquinas() {
         List<String> aux = colorsList.get(groupId);
 
-        for (int i = 0; i < aux.size(); i++) {
-            System.out.println(aux.get(i));
-        }
         // Si ya tiene un color asiganado no hace nada
         if (!"A01".equals(aux.get(meshId))) {
             return;
@@ -466,8 +455,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
             }
         }
         comprobarEsquinasIguales();
-
-        //manejoBotones(false);
     }
 
     int blueCorner = 4;
@@ -518,7 +505,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
 
     private void comprobarEsquinasIguales() {
         List<String> aux = colorsList.get(groupId);
-        //int contador = 0;
 
         for (int i = 0; i < corners.length; i++) {
             List<String> aux2 = colorsList.get(corners[i]);
@@ -544,9 +530,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
 
         List<String> aux = colorsList.get(groupId);
 
-        for (int i = 0; i < aux.size(); i++) {
-            System.out.println(aux.get(i));
-        }
         // Si ya tiene un color asiganado no hace nada
         if (!"A01".equals(aux.get(meshId))) {
             return;
@@ -564,9 +547,7 @@ public class P05_ModoManualViewController extends Controller implements Initiali
         for (int i = 0; i < aux.size(); i++) {
             if (!aux.get(i).equals("A01")) {
                 comprobarColoresOpuestos(aux.get(i));
-
                 comprobarContadoresLados(aux.get(i));
-
                 comprobarLadosIguales(aux.get(i));
             }
         }
@@ -654,42 +635,24 @@ public class P05_ModoManualViewController extends Controller implements Initiali
         }
     }
 
-    int blueTotal = 8;
-    int greenTotal = 8;
-    int orangeTotal = 8;
-    int redTotal = 8;
-    int whiteTotal = 8;
-    int yellowTotal = 8;
     int iniciarPartida = 48;
 
-    private void manejoContadoresTotal(String color) {
+    private void manejoContadoresTotal() {
         iniciarPartida--;
-        switch (color) {
-            case "Blue" -> {
-                blueTotal--;
-                lblBlue.setText(Integer.toString(blueTotal));
-            }
-            case "Green" -> {
-                greenTotal--;
-                lblGreen.setText(Integer.toString(greenTotal));
-            }
-            case "Orange" -> {
-                orangeTotal--;
-                lblOrange.setText(Integer.toString(orangeTotal));
-            }
-            case "Red" -> {
-                redTotal--;
-                lblRed.setText(Integer.toString(redTotal));
-            }
-            case "White" -> {
-                whiteTotal--;
-                lblWhite.setText(Integer.toString(whiteTotal));
-            }
-            case "Yellow" -> {
-                yellowTotal--;
-                lblYellow.setText(Integer.toString(yellowTotal));
-            }
-        }
+
+        int blueTotal = blueSides + blueCorner;
+        int greenTotal = greenSides + greenCorner;
+        int orangeTotal = orangeSides + orangeCorner;
+        int redTotal = redSides + redCorner;
+        int whiteTotal = whiteSides + whiteCorner;
+        int yellowTotal = yellowSides + yellowSides;
+
+        lblBlue.setText(Integer.toString(blueTotal));
+        lblGreen.setText(Integer.toString(greenTotal));
+        lblOrange.setText(Integer.toString(orangeTotal));
+        lblRed.setText(Integer.toString(redTotal));
+        lblWhite.setText(Integer.toString(whiteTotal));
+        lblYellow.setText(Integer.toString(yellowTotal));
     }
 
     // Metodo para el manejo del mouse del cubo3D, angulos, giros y rotaciones

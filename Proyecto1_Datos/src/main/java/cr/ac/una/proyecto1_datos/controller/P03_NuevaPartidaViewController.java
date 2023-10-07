@@ -1,7 +1,6 @@
 package cr.ac.una.proyecto1_datos.controller;
 
 import cr.ac.una.proyecto1_datos.model.Jugador;
-import cr.ac.una.proyecto1_datos.model.Movimientos;
 import cr.ac.una.proyecto1_datos.util.AppContext;
 import cr.ac.una.proyecto1_datos.util.FlowController;
 import cr.ac.una.proyecto1_datos.util.Mensaje;
@@ -68,6 +67,7 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
 
     @Override
     public void initialize() {
+        loadVideo();
     }
 
     @FXML
@@ -145,12 +145,6 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
         });
         rdbManual.setOnMouseEntered(event -> {
             SoundUtil.mouseHoverSound();
-        });
-
-        Stage stage1 = FlowController.getInstance().getMainStage();
-        stage1.setOnShown(event -> {
-            // Luego de que la escena se muestre, solicitar el enfoque a otro nodo
-            rdbAutomatico.requestFocus();
         });
     }
 

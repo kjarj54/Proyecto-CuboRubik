@@ -1,4 +1,4 @@
-Jugador3,40,130,150
-Jugador4,55,140,180
-Jugador5,45,110,120
-Jugador6,70,160,220
+Luvara,40,130,325
+Juan,55,140,255
+Kevin,45,110,245
+Anthony,70,160,230

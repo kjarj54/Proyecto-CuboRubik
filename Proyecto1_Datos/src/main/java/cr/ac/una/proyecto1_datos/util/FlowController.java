@@ -81,10 +81,11 @@ public class FlowController {
 
     public void goMain() {
         try {
-            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
+//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), this.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_MenuView.fxml"), this.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_RegistroJugadorView.fxml"), this.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P05_ModoManualView.fxml"), this.idioma)));
+//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_NuevaPartidaView.fxml"), this.idioma)));
+//FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P04_ContinuarPartidaView.fxml"), this.idioma)));
+            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P05_ModoManualView.fxml"), this.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P06_MesaJuegoView.fxml"), this.idioma)));
 
 

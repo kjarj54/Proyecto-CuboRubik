@@ -155,15 +155,10 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         btnSolucionar.setDisable(true);
+        cronometro = new Cronometro(lblTiempo);
         iniciarScena();
         onActionsGiros();
         cargarAjustesPartida();
-        cronometro = new Cronometro(lblTiempo);
-        //stackMoves.
-
-        // Inicializa el cronometro en 0
-//        cronometro.startCronometro(); // Inicia o continua el cronometro o hilo
-//        cronometro.stopCronometro();  // Pausa el cronometro o hilo
     }
 
     @Override
@@ -191,8 +186,18 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     @FXML
     private void onActionBtnGuardarSalir(ActionEvent event) {
         if (!armar) {
+            cronometro.stopCronometro();
+            jugador.setTime(cronometro.getTime());
+            jugador.setMoves(contadorMovimientos);
+            if (contadorMovimientos == 0) {
+                jugador.setPoints(0);
+            } else {
+                jugador.setPoints(cronometro.getTime() / contadorMovimientos * 100);
+            }
+            jugador.setMovimientos(stackMoves);
             ManejoDatos.guardarJugador(jugador);
-            FlowController.getInstance().goView("P02_MenuViewController");
+            FlowController.getInstance().delete("P06_MesaJuegoView");
+            FlowController.getInstance().goView("P02_MenuView");
         }
     }
 
@@ -205,7 +210,6 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     private void onActionBtnDesarmarAleatorio(ActionEvent event) {
         movimientosAleatorios = rand.nextInt(11) + 15;
         desarmar = true;
-        System.out.println(movimientosAleatorios);
         desarmarAleatorio();
         btnDesarmarAleatorio.setDisable(true);
         manejoBotonesGirosCubo(true);
@@ -216,7 +220,20 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
         if (new Mensaje().showConfirmation("Solucionar cubo", getStage(), "¿Esta seguro que desea solucionar automáticamente el cubo? No puntuaria.")) {
             btnSolucionar.setDisable(true);
             armarCubo();
+            cronometro.stopCronometro();
         }
+    }
+
+    @FXML
+    private void onActionBtnSkin1(ActionEvent event) {
+        cambio = "0";
+        rellenarCubo();
+    }
+
+    @FXML
+    private void onActionBtnSkin2(ActionEvent event) {
+        cambio = "1";
+        rellenarCubo();
     }
 
     // Metodo que carga toda la pantalla principal
@@ -277,14 +294,16 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
         punterosMouse(principalGroup);
         initMouseControl(principalGroup, subScene);
         rellenarCubo();
-
-//      manejadores(groupCen);
     }
+
+    Boolean continuar = false;
 
     private void cargarAjustesPartida() {
         jugador = (Jugador) AppContext.getInstance().get("Jugador");
         lblNombre.setText("Jugador: " + jugador.getName());
         List<List<String>> colorsList = (List<List<String>>) AppContext.getInstance().get("coloresManual");
+        String partida = (String) AppContext.getInstance().get("Pantalla");
+
         if (colorsList != null) {
             int contador = 0;
             for (int i = 0; i < row; i++) {
@@ -301,6 +320,37 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
                 }
             }
             rellenarCubo();
+        }
+
+        if (partida.equals("continuar")) {
+            String pointsStr = String.format("%04d", jugador.getPoints()); // Formatea los minutos con cuatro dígitos
+            String movesStr = String.format("%02d", jugador.getMoves()); // Formatea los minutos con cuatro dígitos
+
+            stackMoves = jugador.getMovimientos();
+            lblMovimientos.setText("Movimientos:" + movesStr);
+            lblPuntos.setText("Puntos: " + pointsStr);
+            lblPila.setText("Tamaño pila:" + stackMoves);
+            cronometro.setTime(jugador.getTime());
+            btnIniciarPartida.setText("Continuar partida");
+
+            Stack<Movimientos> stackAux = jugador.getMovimientos();
+            Stack<Movimientos> stackOrden = new Stack<>();
+            while (!stackAux.isEmpty()) {
+                stackOrden.push(stackAux.pop());
+            }
+
+            while (!stackOrden.isEmpty()) {
+                int cara = stackOrden.lastElement().getNumero();
+                String move = stackOrden.lastElement().getDireccion();
+
+                ejecutarAccion(cara, move, 0);
+                stackOrden.pop();
+            }
+
+            if (stackOrden.isEmpty()) {
+                continuar = true;
+            }
+            btnDesarmarAleatorio.setDisable(true);
         }
     }
 
@@ -406,6 +456,10 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cubo completado", getStage(),
                     "Felicidades " + jugador.getName() + " has completado el cubo.");
             cronometro.stopCronometro();
+            jugador.setTime(cronometro.getTime());
+            jugador.setMoves(contadorMovimientos);
+            jugador.setPoints(cronometro.getTime() / contadorMovimientos * 100);
+            ManejoDatos.guardarRecord(jugador);
             manejoBotonesGirosCubo(true);
         }
     }
@@ -764,7 +818,6 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
                     rotarMatrizHorizontal(2, 'R');
                     animationRotate(face5, -90, 5, time);
                 }
-
             }
         }
         // giro antihorario por cara
@@ -796,7 +849,7 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
                 }
             }
         }
-        if (!armar) {
+        if (!armar && !continuar) {
             Movimientos moves = new Movimientos(opcion, direccion);
             if (!stackMoves.isEmpty()) {
                 if (agregar) {
@@ -1238,18 +1291,6 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
             newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
             group.translateZProperty().set(newZoom);
         });
-    }
-
-    @FXML
-    private void onActionBtnSkin1(ActionEvent event) {
-        cambio = "0";
-        rellenarCubo();
-    }
-
-    @FXML
-    private void onActionBtnSkin2(ActionEvent event) {
-        cambio = "1";
-        rellenarCubo();
     }
 
     // Clase que extiende a group para aplicar los giros y rotaciones

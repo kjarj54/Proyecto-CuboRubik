@@ -28,10 +28,11 @@
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="400.0">
                <children>
-                  <TableView fx:id="tbvMejoresTiempos" prefHeight="500.0" />
+                  <TableView fx:id="tbvMejoresTiempos" fixedCellSize="0.0" VBox.vgrow="ALWAYS" />
+                  <Pane VBox.vgrow="ALWAYS" />
                </children>
                <padding>
-                  <Insets right="20.0" />
+                  <Insets right="20.0" top="20.0" />
                </padding>
             </VBox>
          </children>

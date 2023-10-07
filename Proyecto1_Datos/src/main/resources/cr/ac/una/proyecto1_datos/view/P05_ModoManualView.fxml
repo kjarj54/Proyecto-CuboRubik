@@ -134,7 +134,6 @@
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="80.0" spacing="10.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="-Infinity" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <MFXButton fx:id="btnPruebas" />
                   <Pane layoutX="25.0" layoutY="280.0" maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
@@ -163,6 +162,8 @@
                         <Insets left="17.0" />
                      </padding>
                   </HBox>
+                  <MFXButton fx:id="btnReiniciarLados" onAction="#onActionBtnReiniciarLados" styleClass="mfx-button-menuPrincipal" text="Reiniciar lados" />
+                  <MFXButton fx:id="btnReiniciarEsquinas" layoutX="128.0" layoutY="438.0" onAction="#onActionBtnReiniciarEsquinas" styleClass="mfx-button-menuPrincipal" text="Reiniciar esquinas" />
                   <Pane maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <MFXButton fx:id="btnIniciarPartida" onAction="#onActionBtnIniciarPartida" styleClass="mfx-button-menuPrincipal" text="Iniciar Partida" />
                </children>

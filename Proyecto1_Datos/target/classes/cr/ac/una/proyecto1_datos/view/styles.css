@@ -173,6 +173,12 @@
 /*------------------------------------------------------------------------------*/
 .label{
 
+    -fx-font: 15px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.label-18{
+
     -fx-font: 18px "OCR A Extended"; /* Establece la fuente y el tamano */
     -fx-text-fill: #000000; /* Color del texto */
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
@@ -197,4 +203,16 @@
 /*------------------------------------------------------------------------------*/
 .images-effect {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 204, 1), 10, 0.5, 0.0, 0.0);
+}
+/*------------------------------------------------------------------------------*/
+.table-view{
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-font: 15px "Arial Rounded MT Bold";
+}
+
+.table-column {
+    -fx-background-color: rgba(0, 0, 0, 0.35);/* Cambiar a tu color deseado */
+    -fx-background-radius: 10px;
+    -fx-alignment: CENTER;
 }

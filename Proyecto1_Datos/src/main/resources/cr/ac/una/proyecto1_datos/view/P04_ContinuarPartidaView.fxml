@@ -1,10 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
 
-<AnchorPane id="AnchorPane" fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="cr.ac.una.proyecto1_datos.controller.P04_ContinuarPartidaViewController">
+<AnchorPane id="AnchorPane" fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.proyecto1_datos.controller.P04_ContinuarPartidaViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
+   <children>
+      <MediaView fx:id="mdvCargarPartida" fitHeight="720.0" fitWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="390.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <MFXButton fx:id="btnSalir" onAction="#onActionBtnSalir" styleClass="mfx-button-Image">
+                     <graphic>
+                        <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/media/icons/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="412.0" layoutY="10.0" minWidth="-Infinity" prefWidth="500.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <MFXTextField fx:id="txfNombre" floatingText="Digite el nombre de jugador de la partida a cargar" styleClass="mfx-text-field-edit" />
+                  <MFXButton fx:id="btnCargarPartida" onAction="#onActionBtnIniciar" styleClass="mfx-button-menuPrincipal" text="Iniciar partida" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="174.0" layoutY="10.0" prefHeight="200.0" prefWidth="390.0" spacing="10.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </HBox>
+   </children>
 </AnchorPane>

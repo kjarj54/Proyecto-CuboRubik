@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,27 +56,7 @@ public class P02_MenuViewController extends Controller implements Initializable 
         // TODO
         loadVideo();
         onMouseEntered();
-        ObservableList<Jugador> jugadores = FXCollections.observableArrayList(leerRecords().stream()
-                .sorted(Comparator.comparing(Jugador::getTime)) // Ordena por el campo "time"
-                .collect(Collectors.toList()));
-        // Asocia la lista de jugadores a la TableView
-        tbvMejoresTiempos.setItems(jugadores);
-
-        // Crea las columnas y asocia sus propiedades
-        TableColumn<Jugador, String> nameColumn = new TableColumn<>("Nombre");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Jugador, Integer> timeColumn = new TableColumn<>("Tiempo");
-        timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
-
-        TableColumn<Jugador, Integer> movesColumn = new TableColumn<>("Movimientos");
-        movesColumn.setCellValueFactory(new PropertyValueFactory<>("moves"));
-
-        TableColumn<Jugador, Integer> pointsColumn = new TableColumn<>("Puntos");
-        pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
-
-        // Agrega las columnas a la TableView
-        tbvMejoresTiempos.getColumns().addAll(nameColumn, timeColumn, movesColumn, pointsColumn);
+        cargarMejoresTiempos();
     }
 
     @Override
@@ -112,7 +93,43 @@ public class P02_MenuViewController extends Controller implements Initializable 
     }
 
     private void cargarMejoresTiempos() {
+        ObservableList<Jugador> jugadores = FXCollections.observableArrayList(leerRecords().stream()
+                .sorted(Comparator.comparing(Jugador::getPoints).reversed()) // Ordena por el campo "points"
+                .collect(Collectors.toList()));
 
+        // Asocia la lista de jugadores a la TableView
+        tbvMejoresTiempos.setItems(jugadores);
+
+        // Crea las columnas y asocia sus propiedades
+        TableColumn<Jugador, String> nameColumn = new TableColumn<>("Nombre");
+        nameColumn.setPrefWidth(95);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Jugador, String> timeColumn = new TableColumn<>("Tiempo");
+        timeColumn.setPrefWidth(90);
+
+        timeColumn.setCellValueFactory(cellData -> {
+            Integer tiempo = cellData.getValue().getTime();
+            int minutes = tiempo / 60;
+            int seconds = tiempo % 60;
+
+            String minutesStr = String.format("%02d", minutes); // Formatea los minutos con dos dígitos
+            String secondsStr = String.format("%02d", seconds); // Formatea los segundos con dos dígitos
+
+            String tiempoFormateado = minutesStr + ":" + secondsStr + ".";
+            return new SimpleStringProperty(tiempoFormateado);
+        });
+
+        TableColumn<Jugador, Integer> movesColumn = new TableColumn<>("Movimientos");
+        movesColumn.setPrefWidth(105);
+        movesColumn.setCellValueFactory(new PropertyValueFactory<>("moves"));
+
+        TableColumn<Jugador, Integer> pointsColumn = new TableColumn<>("Puntos");
+        pointsColumn.setPrefWidth(90);
+        pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
+
+        // Agrega las columnas a la TableView
+        tbvMejoresTiempos.getColumns().addAll(nameColumn, timeColumn, movesColumn, pointsColumn);
     }
 
     private void loadVideo() {

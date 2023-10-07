@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 
 /**
  * FXML Controller class
@@ -45,7 +46,6 @@ public class P01_PrincipalViewController extends Controller implements Initializ
         // TODO
         btnIngresar.setVisible(false);
         loadVideo();
-
     }
 
     @Override

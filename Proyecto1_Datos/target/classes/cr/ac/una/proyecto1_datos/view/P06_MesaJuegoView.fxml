@@ -22,12 +22,12 @@
          <children>
             <VBox minWidth="-Infinity" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label fx:id="lblNombre" prefHeight="50.0" text="Nombre: " />
-                  <Label fx:id="lblTiempo" layoutX="30.0" layoutY="30.0" prefHeight="50.0" text="Tiempo: 00: 00." />
-                  <Label fx:id="lblMovimientos" layoutX="30.0" layoutY="80.0" prefHeight="50.0" text="Movimientos: 00" />
-                  <Label fx:id="lblPuntos" layoutX="25.0" layoutY="145.0" prefHeight="50.0" text="Puntos: 0000" />
+                  <Label fx:id="lblNombre" prefHeight="50.0" styleClass="label-18" text="Nombre: " />
+                  <Label fx:id="lblTiempo" layoutX="30.0" layoutY="30.0" prefHeight="50.0" styleClass="label-18" text="Tiempo: 00: 00." />
+                  <Label fx:id="lblMovimientos" layoutX="30.0" layoutY="80.0" prefHeight="50.0" styleClass="label-18" text="Movimientos: 00" />
+                  <Label fx:id="lblPuntos" layoutX="25.0" layoutY="145.0" prefHeight="50.0" styleClass="label-18" text="Puntos: 0000" />
                   <MFXButton fx:id="btnIniciarPartida" onAction="#onActionBtnIniciarPartida" styleClass="mfx-button-menuPrincipal" text="Iniciar Partida" />
-                  <Label fx:id="lblPila" prefHeight="50.0" text="Tamaño pila: 0" />
+                  <Label fx:id="lblPila" prefHeight="50.0" styleClass="label-18" text="Tamaño pila: 0" />
                   <Pane maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <MFXButton fx:id="btnDesarmarAleatorio" buttonType="RAISED" onAction="#onActionBtnDesarmarAleatorio" styleClass="mfx-button-menuPrincipal" text="Desarmar Aleatorio" />
                </children>
