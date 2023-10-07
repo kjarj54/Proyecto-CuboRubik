@@ -38,7 +38,7 @@ public class P04_ContinuarPartidaViewController extends Controller implements In
     private MFXTextField txfNombre;
     @FXML
     private MFXButton btnCargarPartida;
-    
+
     MediaPlayer mediaPlayer;
 
     /**
@@ -47,6 +47,11 @@ public class P04_ContinuarPartidaViewController extends Controller implements In
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        AnchorPane.setTopAnchor(root, 0.0);
+        AnchorPane.setLeftAnchor(root, 0.0);
+        AnchorPane.setRightAnchor(root, 0.0);
+        AnchorPane.setBottomAnchor(root, 0.0);
+
         onActionMouse();
         loadVideo();
     }

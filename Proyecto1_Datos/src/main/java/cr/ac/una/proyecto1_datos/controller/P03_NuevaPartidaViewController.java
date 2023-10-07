@@ -23,7 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -59,6 +58,11 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        AnchorPane.setTopAnchor(root, 0.0);
+        AnchorPane.setLeftAnchor(root, 0.0);
+        AnchorPane.setRightAnchor(root, 0.0);
+        AnchorPane.setBottomAnchor(root, 0.0);
+
         rdbAutomatico.setUserData("Automatico");
         rdbManual.setUserData("Manual");
         onActionMouse();
@@ -72,28 +76,28 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
 
     @FXML
     private void onActionBtnIniciar(ActionEvent event) {
-
+        SoundUtil.mouseEnterSound();
         if (txfNombre.getText().isBlank()) {
             SoundUtil.errorSound();
             new Mensaje().showModal(Alert.AlertType.ERROR, "Ingresar Jugador", getStage(), "Es necesario digitar un nombre para continuar");
         } else {
-            SoundUtil.mouseEnterSound();
-            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0,0, 0, new Stack<>());
+            jugador = new Jugador(txfNombre.getText(), (String) tggModoJuego.getSelectedToggle().getUserData(), 0, 0, 0, new Stack<>());
             AppContext.getInstance().set("Jugador", jugador);
-            FlowController.getInstance().delete("P02_RegistroJugadoresView");
-            if (tggModoJuego.getSelectedToggle().getUserData().equals("Automatico")){
+            FlowController.getInstance().delete("P03_NuevaPartidaViewController");
+            if (tggModoJuego.getSelectedToggle().getUserData().equals("Automatico")) {
                 FlowController.getInstance().goView("P06_MesaJuegoView");
-            } else{
+                txfNombre.clear();
+            } else {
                 FlowController.getInstance().goView("P05_ModoManualView");
+                txfNombre.clear();
             }
-            
         }
     }
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        FlowController.getInstance().delete("P02_RegistroJugadoresView");
+        FlowController.getInstance().delete("P03_NuevaPartidaViewController");
         FlowController.getInstance().goView("P02_MenuView");
     }
 
@@ -131,13 +135,13 @@ public class P03_NuevaPartidaViewController extends Controller implements Initia
                 imvPlayButton.setImage(image);
             }
         });
-        
+
         btnSalir.setOnMouseEntered(event -> {
-           SoundUtil.mouseHoverSound();
+            SoundUtil.mouseHoverSound();
         });
-        
-        txfNombre.setOnKeyReleased(event ->{
-        SoundUtil.keyTyping();
+
+        txfNombre.setOnKeyReleased(event -> {
+            SoundUtil.keyTyping();
         });
 
         rdbAutomatico.setOnMouseEntered(event -> {

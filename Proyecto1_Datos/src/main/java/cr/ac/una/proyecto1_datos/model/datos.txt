@@ -1,7 +1,1 @@
-Jugador1,Modo1,100,50,120,
-Jugador2,Modo2,200,60,150,
-Jugador3,Modo1,150,40,130,
-Jugador4,Modo2,180,55,140,
-Jugador5,Modo1,120,45,110,
-Jugador6,Modo2,220,70,160,
 Luis,Automatico,8600,3,258,42#antihora;3#up2;50#hora;2#up0;1#right0;50#left2;2#down2;52#up0;50#down2;41#up0;3#left2;43#up0;53#left2;2#left0;43#down0;2#down0;43#down2;40#down0;40#right0;0#right0;0#up2;0#right0;

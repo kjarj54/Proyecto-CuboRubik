@@ -119,6 +119,11 @@ public class P05_ModoManualViewController extends Controller implements Initiali
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        AnchorPane.setTopAnchor(root, 0.0);
+        AnchorPane.setLeftAnchor(root, 0.0);
+        AnchorPane.setRightAnchor(root, 0.0);
+        AnchorPane.setBottomAnchor(root, 0.0);
+
         btnBlue.setUserData("Blue");
         btnGreen.setUserData("Green");
         btnOrange.setUserData("Orange");
@@ -339,7 +344,6 @@ public class P05_ModoManualViewController extends Controller implements Initiali
 //                    System.out.println("meshview id: " + meshView.getId());
 //                    System.out.println("group id: " + group1.getId());
 //                    System.out.println("Tamano del group" + group1.getChildren().size());
-
                     if (groupChildren == 1) {
                         manejoBotones(true);
                     }
@@ -379,17 +383,17 @@ public class P05_ModoManualViewController extends Controller implements Initiali
             anchorAngleY = angleY.get();
             group.setCursor(Cursor.OPEN_HAND);
         });
-        btnIniciarPartida.setOnMouseEntered(event->{
-        SoundUtil.mouseHoverSound();
+        btnIniciarPartida.setOnMouseEntered(event -> {
+            SoundUtil.mouseHoverSound();
         });
-        btnReiniciarEsquinas.setOnMouseEntered(event->{
-        SoundUtil.mouseHoverSound();
+        btnReiniciarEsquinas.setOnMouseEntered(event -> {
+            SoundUtil.mouseHoverSound();
         });
-        btnReiniciarLados.setOnMouseEntered(event->{
-        SoundUtil.mouseHoverSound();
+        btnReiniciarLados.setOnMouseEntered(event -> {
+            SoundUtil.mouseHoverSound();
         });
-        btnSalir.setOnMouseEntered(event->{
-        SoundUtil.mouseHoverSound();
+        btnSalir.setOnMouseEntered(event -> {
+            SoundUtil.mouseHoverSound();
         });
     }
 
@@ -635,17 +639,18 @@ public class P05_ModoManualViewController extends Controller implements Initiali
         }
     }
 
-    int iniciarPartida = 48;
+    int iniciarPartida = 0;
 
     private void manejoContadoresTotal() {
-        iniciarPartida--;
 
         int blueTotal = blueSides + blueCorner;
         int greenTotal = greenSides + greenCorner;
         int orangeTotal = orangeSides + orangeCorner;
         int redTotal = redSides + redCorner;
         int whiteTotal = whiteSides + whiteCorner;
-        int yellowTotal = yellowSides + yellowSides;
+        int yellowTotal = yellowSides + yellowCorner;
+
+        iniciarPartida = blueTotal + greenTotal + orangeTotal + redTotal + whiteTotal + yellowTotal;
 
         lblBlue.setText(Integer.toString(blueTotal));
         lblGreen.setText(Integer.toString(greenTotal));

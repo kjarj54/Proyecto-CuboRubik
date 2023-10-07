@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.SubScene?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -160,25 +161,33 @@
             <VBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" minWidth="-Infinity" prefWidth="290.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
                   <MFXButton fx:id="btnGuardarSalir" onAction="#onActionBtnGuardarSalir" styleClass="mfx-button-menuSalir" text="Guardar y Salir" />
-                  <MFXButton fx:id="btnSkin1" onAction="#onActionBtnSkin1" styleClass="mfx-button-Image">
-                     <graphic>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/media/colors/Green0.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </MFXButton>
-                  <MFXButton fx:id="btnSkin2" onAction="#onActionBtnSkin2" styleClass="mfx-button-Image">
-                     <graphic>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/media/colors/Green1.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </MFXButton>
-                  <Pane maxHeight="1.7976931348623157E308" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <HBox spacing="10.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <TableView fx:id="tbvPasos" maxHeight="1.7976931348623157E308" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <MFXButton fx:id="btnSkin1" onAction="#onActionBtnSkin1" styleClass="mfx-button-Image">
+                                 <graphic>
+                                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Green0.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                              <MFXButton fx:id="btnSkin2" onAction="#onActionBtnSkin2" styleClass="mfx-button-Image">
+                                 <graphic>
+                                    <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/colors/Green1.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </MFXButton>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                   <MFXButton fx:id="btnSolucionar" buttonType="RAISED" onAction="#onActionBtnSolucionar" styleClass="mfx-button-menuPrincipal" text="Armar Automático" />
                </children>
                <padding>

@@ -1,6 +1,5 @@
 cr\ac\una\proyecto1_datos\controller\P06_MesaJuegoViewController.class
 cr\ac\una\proyecto1_datos\model\Cubito.class
-cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController.class
 cr\ac\una\proyecto1_datos\App.class
 cr\ac\una\proyecto1_datos\controller\P02_MenuViewController.class
 cr\ac\una\proyecto1_datos\controller\P03_NuevaPartidaViewController.class
@@ -11,7 +10,6 @@ cr\ac\una\proyecto1_datos\controller\Controller.class
 cr\ac\una\proyecto1_datos\controller\P04_ContinuarPartidaViewController.class
 cr\ac\una\proyecto1_datos\model\Jugador.class
 cr\ac\una\proyecto1_datos\controller\P06_MesaJuegoViewController$SmartGroup.class
-cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController$1.class
 cr\ac\una\proyecto1_datos\model\Cubito$PositionCube.class
 cr\ac\una\proyecto1_datos\util\Mensaje.class
 cr\ac\una\proyecto1_datos\model\Cubo3D.class
@@ -23,6 +21,5 @@ cr\ac\una\proyecto1_datos\util\AppContext.class
 cr\ac\una\proyecto1_datos\controller\P01_PrincipalViewController.class
 cr\ac\una\proyecto1_datos\util\Cronometro.class
 cr\ac\una\proyecto1_datos\model\Cubito$1.class
-cr\ac\una\proyecto1_datos\controller\A01_PruebasViewController$SmartGroup.class
 cr\ac\una\proyecto1_datos\controller\P05_ModoManualViewController.class
 cr\ac\una\proyecto1_datos\controller\P05_ModoManualViewController$SmartGroup.class

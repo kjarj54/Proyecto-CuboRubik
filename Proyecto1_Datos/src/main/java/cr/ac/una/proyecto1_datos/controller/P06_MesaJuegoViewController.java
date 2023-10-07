@@ -9,6 +9,7 @@ import cr.ac.una.proyecto1_datos.util.Cronometro;
 import cr.ac.una.proyecto1_datos.util.FlowController;
 import cr.ac.una.proyecto1_datos.util.ManejoDatos;
 import cr.ac.una.proyecto1_datos.util.Mensaje;
+import cr.ac.una.proyecto1_datos.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ import java.util.Stack;
 import javafx.animation.RotateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,6 +36,8 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -94,6 +101,8 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     private MFXButton btnSkin1;
     @FXML
     private MFXButton btnSkin2;
+    @FXML
+    private TableView<Movimientos> tbvPasos;
 
     // Variables Globales-------------------------------------------------------
     // Variables para los giros del cubo con el mouse
@@ -154,7 +163,13 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        AnchorPane.setTopAnchor(root, 0.0);
+        AnchorPane.setLeftAnchor(root, 0.0);
+        AnchorPane.setRightAnchor(root, 0.0);
+        AnchorPane.setBottomAnchor(root, 0.0);
+
         btnSolucionar.setDisable(true);
+        tbvPasos.setVisible(false);
         cronometro = new Cronometro(lblTiempo);
         iniciarScena();
         onActionsGiros();
@@ -170,6 +185,7 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnIniciarPartida(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         if (stackMoves.size() < 15) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error de inicio", getStage(),
                     "Es necesario hacer más movimientos de desarme del cubo para iniciar la partida");
@@ -185,7 +201,11 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnGuardarSalir(ActionEvent event) {
-        if (!armar) {
+        SoundUtil.mouseEnterSound();
+        if (!partidaIniciada) {
+            FlowController.getInstance().delete("P06_MesaJuegoView");
+            FlowController.getInstance().goView("P02_MenuView");
+        } else if (!armar) {
             cronometro.stopCronometro();
             jugador.setTime(cronometro.getTime());
             jugador.setMoves(contadorMovimientos);
@@ -198,6 +218,9 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
             ManejoDatos.guardarJugador(jugador);
             FlowController.getInstance().delete("P06_MesaJuegoView");
             FlowController.getInstance().goView("P02_MenuView");
+        } else {
+            FlowController.getInstance().delete("P06_MesaJuegoView");
+            FlowController.getInstance().goView("P02_MenuView");
         }
     }
 
@@ -208,6 +231,7 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnDesarmarAleatorio(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         movimientosAleatorios = rand.nextInt(11) + 15;
         desarmar = true;
         desarmarAleatorio();
@@ -217,6 +241,7 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnSolucionar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         if (new Mensaje().showConfirmation("Solucionar cubo", getStage(), "¿Esta seguro que desea solucionar automáticamente el cubo? No puntuaria.")) {
             btnSolucionar.setDisable(true);
             armarCubo();
@@ -226,12 +251,14 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnSkin1(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         cambio = "0";
         rellenarCubo();
     }
 
     @FXML
     private void onActionBtnSkin2(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         cambio = "1";
         rellenarCubo();
     }
@@ -319,10 +346,11 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
                     }
                 }
             }
+            btnDesarmarAleatorio.setDisable(true);
             rellenarCubo();
         }
 
-        if (partida.equals("continuar")) {
+        if (partida != null) {
             String pointsStr = String.format("%04d", jugador.getPoints()); // Formatea los minutos con cuatro dígitos
             String movesStr = String.format("%02d", jugador.getMoves()); // Formatea los minutos con cuatro dígitos
 
@@ -1236,6 +1264,20 @@ public class P06_MesaJuegoViewController extends Controller implements Initializ
             btnRotarAntireloj.setDisable(active);
         }
     }
+
+//    private void mostrarPasos() {
+//        ObservableList<Movimientos> movimientosList = FXCollections.observableArrayList(stackMoves);
+//
+//        tbvPasos = new TableView<>(movimientosList);
+//
+//        TableColumn<Movimientos, Integer> numeroColumn = new TableColumn<>("Número");
+//        numeroColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getNumero()).asObject());
+//
+//        TableColumn<Movimientos, String> descripcionColumn = new TableColumn<>("Descripción");
+//        descripcionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDireccion()));
+//
+//        tbvPasos.getColumns().setAll(numeroColumn, descripcionColumn);
+//    }
 
     // Metodo para el manejo del mouse del cubo3D, angulos, giros y rotaciones
     private void initMouseControl(SmartGroup group, SubScene scene) {
