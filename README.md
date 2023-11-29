@@ -50,15 +50,6 @@ Este proyecto consiste en la implementación de un simulador del juego del cubo 
    - Movimientos realizados
    - Tiempo invertido en la partida
 
-## Aspectos Generales
-
-- El tamaño de los grupos de trabajo será definido por el profesor.
-- Proyecto grupal con defensa individual.
-- Penalización del -15% en la nota final si se detecta falta de contribución equitativa en un grupo.
-- Entregar el proyecto en una carpeta comprimida con las fuentes y un archivo de instrucciones de compilación.
-- No hay tiempo adicional después de la fecha de entrega.
-
----
 
 ## Instrucciones de Compilación
 
